@@ -1,0 +1,6 @@
+[submodule "dex-urdf"]
+	path = dex-urdf
+	url = https://github.com/dexsuite/dex-urdf.git
+[submodule "orcahand_description"]
+	path = orcahand_description
+	url = https://github.com/orcahand/orcahand_description.git

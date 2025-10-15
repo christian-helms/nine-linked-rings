@@ -7,7 +7,7 @@ set -euo pipefail
 #   CXR_ATTACH=1 ./start_cloudxr_runtime.sh  # starts attached (foreground)
 
 CONTAINER_NAME="${CXR_CONTAINER_NAME:-cloudxr-runtime}"
-IMAGE="${CXR_IMAGE:-nvcr.io/nvidia/cloudxr-runtime:5.0.0}"
+IMAGE="${CXR_IMAGE:-nvcr.io/nvidia/cloudxr-runtime:5.0.1}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ISAACLAB_DIR="${ISAACLAB_DIR:-$SCRIPT_DIR}"
@@ -37,8 +37,15 @@ docker run $DETACH_FLAG \
   --name "$CONTAINER_NAME" \
   --runtime=nvidia --gpus=all \
   -e ACCEPT_EULA=Y \
-  -e NVIDIA_DRIVER_CAPABILITIES=graphics,utility,compute,display \
+  -e NVIDIA_DRIVER_CAPABILITIES=graphics,utility,compute,display,video \
+  -e XDG_RUNTIME_DIR=/openxr/run \
+  -e XR_RUNTIME_JSON=/openxr/share/openxr/1/openxr_cloudxr.json \
+  -e VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json \
+  -e LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libvulkan.so.1 \
   --mount type=bind,src="$OPENXR_DIR",dst=/openxr \
+  --mount type=bind,src=/usr/share/vulkan,dst=/usr/share/vulkan,ro \
+  --mount type=bind,src=/usr/share/vulkan/icd.d,dst=/usr/share/vulkan/icd.d,ro \
+  --mount type=bind,src=/usr/lib/x86_64-linux-gnu/libvulkan.so.1,dst=/usr/lib/x86_64-linux-gnu/libvulkan.so.1,ro \
   -p 48010:48010 \
   -p 47998:47998/udp \
   -p 47999:47999/udp \
