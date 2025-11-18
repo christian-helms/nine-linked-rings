@@ -4,3 +4,15 @@
 [submodule "orcahand_description"]
 	path = orcahand_description
 	url = https://github.com/orcahand/orcahand_description.git
+[submodule "orca_retargeter"]
+	path = orca_retargeter
+	url = https://github.com/orcahand/orca_retargeter.git
+[submodule "orca_core"]
+	path = orca_core
+	url = https://github.com/orcahand/orca_core.git
+[submodule "dex-retargeting"]
+	path = dex-retargeting
+	url = https://github.com/dexsuite/dex-retargeting.git
+[submodule "GeoRT"]
+	path = GeoRT
+	url = https://github.com/facebookresearch/GeoRT.git

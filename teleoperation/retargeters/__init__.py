@@ -1,16 +1,13 @@
-"""Retargeter configurations for teleoperation.
+# Copyright (c) 2022-2025, The Isaac Lab Project Developers (https://github.com/isaac-sim/IsaacLab/blob/main/CONTRIBUTORS.md).
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
 
-This package contains retargeters that map hand tracking data from
-various devices (Manus gloves, VR controllers, etc.) to robot commands.
-"""
+"""Retargeter implementations for teleoperation devices."""
 
-from .manus_vive_inspire_retargeter_cfg import (
-    ManusViveInspireRetargeter,
-    ManusViveInspireRetargeterCfg,
-)
+from .orca_hand_retargeter import ORCAHandRetargeter, ORCAHandRetargeterCfg
 
 __all__ = [
-    "ManusViveInspireRetargeter",
-    "ManusViveInspireRetargeterCfg",
+    "ORCAHandRetargeter",
+    "ORCAHandRetargeterCfg",
 ]
-

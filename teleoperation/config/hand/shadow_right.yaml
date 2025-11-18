@@ -1,0 +1,7 @@
+assembly_cfg:
+  _target_: assets.assemblies_cfg.get_shadow_right_cfg
+retargeter:
+  _target_: teleoperation.retargeters.shadow_hand_retargeter.ShadowHandRetargeter
+  cfg:
+    _target_: teleoperation.retargeters.shadow_hand_retargeter.ShadowHandRetargeterCfg
+    hand_side: right

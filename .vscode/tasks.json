@@ -4,7 +4,48 @@
     "version": "2.0.0",
     "tasks": [
         {
-            // setup python env
+            "label": "Teleoperate",
+            "type": "shell",
+            "command": "/bin/bash",
+            "args": [
+                "-lc",
+                "source ${workspaceFolder}/nine-linked-rings-venv/bin/activate && python ${workspaceFolder}/teleoperation/teleop_in_vr.py"
+            ],
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Collect Manus Mocap Data",
+            "type": "shell",
+            "command": "/bin/bash",
+            "args": [
+                "-lc",
+                "source ${workspaceFolder}/GeoRT/geort/mocap/geort-mocap/bin/activate && python ${workspaceFolder}/GeoRT/collect_manus_mocap_data.py"
+            ],
+        },
+        {
+            "label": "Train GeoRT",
+            "type": "shell",
+            "command": "/bin/bash",
+            "args": [
+                "-lc",
+                "source ${workspaceFolder}/nine-linked-rings-venv/bin/activate && cd ${workspaceFolder}/GeoRT/ && python geort/trainer.py -hand allegro_right -human_data my_right_hand -ckpt_tag my_right_hand_0"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Manus Mocap Evaluation",
+            "type": "shell",
+            "command": "/bin/bash",
+            "args": [
+                "-lc",
+                "source ${workspaceFolder}/nine-linked-rings-venv/bin/activate && cd ${workspaceFolder}/GeoRT/ && python geort/mocap/manus_evaluation.py -hand allegro_right -ckpt_tag my_right_hand_0"
+            ],
+            "problemMatcher": []
+        }
+        {
             "label": "setup_python_env",
             "type": "shell",
             "linux": {
@@ -15,7 +56,6 @@
             }
         },
         {
-            // run formatter
             "label": "run_formatter",
             "type": "shell",
             "linux": {

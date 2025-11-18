@@ -21,6 +21,9 @@
 **/.pytest_cache/
 **/*.pyc
 **/*.pb
+**/.venv/
+**/*venv*/
+**/geort-mocap/
 
 # Docker/Singularity
 **/*.sif
@@ -42,6 +45,7 @@ docker/.container.cfg
 **/.neptune/*
 docker/artifacts/
 *.tmp
+out_takes/
 
 # Doc Outputs
 **/docs/_build/*

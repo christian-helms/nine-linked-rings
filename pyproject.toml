@@ -64,8 +64,8 @@ known_task_firstparty = "isaaclab_tasks"
 known_local_folder = "config"
 
 [tool.pyright]
-
-include = ["source", "scripts"]
+include = ["source", "scripts", "teleoperation", "environments", "evaluation", "learning", "GeoRT"]
+extraPaths = ["GeoRT"]
 exclude = [
     "**/__pycache__",
     "**/_isaac_sim",
@@ -90,6 +90,10 @@ reportGeneralTypeIssues = "none"       # -> raises 218 errors (usage of literal 
 reportOptionalMemberAccess = "warning" # -> raises 8 errors
 reportPrivateUsage = "warning"
 
+
+[tool.ruff]
+# Allow imports not at the top of the file
+ignore = ["E402"]
 
 [tool.codespell]
 skip = '*.usd,*.svg,*.png,_isaac_sim*,*.bib,*.css,*/_build'

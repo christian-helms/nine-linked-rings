@@ -31,8 +31,8 @@ with contextlib.suppress(ModuleNotFoundError):
 
 from isaacsim.core.prims import SingleXFormPrim
 
+from teleoperation.manus_vive_integration import ManusViveIntegration
 from .manus_vive_utils import HAND_JOINT_MAP
-from .manus_vive_integration import ManusViveIntegration
 
 
 @dataclass

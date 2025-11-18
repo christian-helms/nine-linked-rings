@@ -1,0 +1,26 @@
+hydra:
+  job:
+    chdir: false
+
+defaults:
+  - hand: svh_left
+  - _self_
+
+env:
+  _target_: environments.pretty_env_cfg.NineLinkedRingsEnvCfg
+
+device:
+  _target_: isaaclab.devices.openxr.ManusVive
+  cfg:
+    _target_: isaaclab.devices.openxr.ManusViveCfg
+    xr_cfg:
+      _target_: isaaclab.devices.openxr.XrCfg
+      anchor_pos: [0.0, 0.0, 0.0]
+      anchor_rot: [1.0, 0.0, 0.0, 0.0]
+      near_plane: 0.1
+  retargeters:
+    - _target_: teleoperation.retargeters.wrist_retargeter.WristRetargeter
+      cfg:
+        _target_: teleoperation.retargeters.wrist_retargeter.WristRetargeterCfg
+        hand_side: ${hand.side}
+    - ${hand.retargeter}

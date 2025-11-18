@@ -25,7 +25,7 @@ $(OBJ_DIR)/%.o: %.cpp
 $(APP_DIR)/$(TARGET): $(OBJECTS)
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -shared -o $(APP_DIR)/$(TARGET) $^ $(LDFLAGS)
-	
+
 -include $(DEPENDENCIES)
 
 .PHONY: all build clean debug release info install uninstall

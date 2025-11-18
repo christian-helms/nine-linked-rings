@@ -2,6 +2,12 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../.cache/packman/chk/kit-kernel/107.3.3+isaac.229672.69cbf6ad.gl.manylinux_2_35_x86_64.release/logs/Kit/Isaac-Sim/5.1"
+		},
+		{
+			"path": "GeoRT/geort/mocap"
 		}
 	],
 	"settings": {
@@ -10,6 +16,6 @@
 			"*.kit": "toml",
 			"*.rst": "restructuredtext"
 		},
-		"python.languageServer": "None",
-	},
+		"python.languageServer": "None"
+	}
 }

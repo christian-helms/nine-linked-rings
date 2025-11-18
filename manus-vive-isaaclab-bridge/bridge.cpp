@@ -32,7 +32,7 @@ extern "C" {
     uint32_t actual_count = 0;
     Bridge::s_Instance->Poll(buffer, buffer_size, actual_count);
     *count = actual_count;
-    
+
     // Return -2 if no data is available (count is 0)
     return (actual_count == 0) ? -2 : 0;
   }
@@ -199,7 +199,7 @@ void Bridge::Poll(ManusNodePose *buffer, uint32_t buffer_size,
   m_NextRawSkeleton = nullptr;
 
   count = 0; // Initialize count to zero
-  
+
   // Check if we have valid skeleton data
   if (!m_RawSkeleton || m_RawSkeleton->skeletons.size() == 0) {
     m_RawSkeletonMutex.unlock();
@@ -212,14 +212,14 @@ void Bridge::Poll(ManusNodePose *buffer, uint32_t buffer_size,
   for (uint32_t i = 0; i < t_SkeletonCount; i++) {
     uint32_t t_GloveId = m_RawSkeleton->skeletons[i].info.gloveId;
     uint32_t t_NodeCount = m_RawSkeleton->skeletons[i].info.nodesCount;
-    
+
     // Check if we have enough buffer space
     if (buffer_index + t_NodeCount > buffer_size) {
       ClientLog::error("Buffer overflow prevented: need {} slots but only {} available",
                        buffer_index + t_NodeCount, buffer_size);
       break;
     }
-    
+
     NodeInfo node_info[t_NodeCount];
     SDKReturnCode result = CoreSdk_GetRawSkeletonNodeInfoArray(t_GloveId, node_info, t_NodeCount);
     if (result != SDKReturnCode::SDKReturnCode_Success) {
@@ -237,7 +237,7 @@ void Bridge::Poll(ManusNodePose *buffer, uint32_t buffer_size,
       node_pose.orientation = node.transform.rotation;
     }
   }
-  
+
   count = buffer_index; // Set the actual number of nodes written
 
   m_RawSkeletonMutex.unlock();

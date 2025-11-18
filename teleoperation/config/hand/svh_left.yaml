@@ -1,0 +1,19 @@
+side: left
+assembly_cfg:
+  _target_: assets.assemblies_cfg.get_svh_left_cfg
+joint_names:
+  - Left_Hand_Thumb_Opposition
+  - Left_Hand_Thumb_Flexion
+  - Left_Hand_Index_Finger_Proximal
+  - Left_Hand_Index_Finger_Distal
+  - Left_Hand_Middle_Finger_Proximal
+  - Left_Hand_Middle_Finger_Distal
+  - Left_Hand_Ring_Finger
+  - Left_Hand_Pinky
+  - Left_Hand_Finger_Spread
+retargeter:
+  _target_: teleoperation.retargeters.schunk_hand_retargeter.SchunkHandRetargeter
+  cfg:
+    _target_: teleoperation.retargeters.schunk_hand_retargeter.SchunkHandRetargeterCfg
+    hand_side: ${hand.side}
+    joint_names: ${hand.joint_names}

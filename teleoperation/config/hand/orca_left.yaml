@@ -1,0 +1,7 @@
+assembly_cfg:
+  _target_: assets.assemblies_cfg.get_orca_left_cfg
+retargeter:
+  _target_: teleoperation.retargeters.orca_hand_retargeter.ORCAHandRetargeter
+  cfg:
+    _target_: teleoperation.retargeters.orca_hand_retargeter.ORCAHandRetargeterCfg
+    hand_side: left

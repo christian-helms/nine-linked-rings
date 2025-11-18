@@ -1,14 +1,18 @@
+# Copyright (c) 2022-2025, The Isaac Lab Project Developers (https://github.com/isaac-sim/IsaacLab/blob/main/CONTRIBUTORS.md).
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 """Utilities for recording teleoperation demonstrations."""
 
 from __future__ import annotations
 
 import json
+import numpy as np
 import pickle
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
-import numpy as np
 
 
 class DemonstrationRecorder:
@@ -197,9 +201,7 @@ def load_demonstration(filepath: str) -> dict[str, Any]:
             "metadata": json.loads(str(data["metadata"])),
         }
     elif filepath.suffix == ".json":
-        with open(filepath, "r") as f:
+        with open(filepath) as f:
             return json.load(f)
     else:
         raise ValueError(f"Unsupported file format: {filepath.suffix}")
-
-

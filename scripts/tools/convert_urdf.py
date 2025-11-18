@@ -65,6 +65,12 @@ parser.add_argument(
     choices=["position", "velocity", "none"],
     help="The type of control to use for the joint drive.",
 )
+parser.add_argument(
+    "--make-instanceable",
+    action="store_true",
+    default=False,
+    help="Make the asset instanceable for efficient cloning.",
+)
 
 # append AppLauncher cli args
 AppLauncher.add_app_launcher_args(parser)
@@ -106,6 +112,7 @@ def main():
         asset_path=urdf_path,
         usd_dir=os.path.dirname(dest_path),
         usd_file_name=os.path.basename(dest_path),
+        make_instanceable=args_cli.make_instanceable,
         fix_base=args_cli.fix_base,
         merge_fixed_joints=args_cli.merge_joints,
         force_usd_conversion=True,

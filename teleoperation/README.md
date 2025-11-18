@@ -1,21 +1,21 @@
 # Nine Linked Rings Teleoperation
 
-Streamlined teleoperation workflow for the Nine Linked Rings puzzle using ManusVive hand tracking and Vive trackers.
+Teleoperation workflow for the Nine Linked Rings puzzle using ManusVive hand tracking and Vive trackers with XR support via the Apple Vision Pro.
 
 ## Overview
 
-This package provides a focused teleoperation setup for controlling a robotic **left** hand attached to a robotic arm to manipulate the Nine Linked Rings puzzle. 
+This package provides a focused teleoperation setup for controlling a robotic hand attached to a robotic arm to manipulate the Nine Linked Rings puzzle.
 It uses:
 
 - **ManusVive Device**: Left Manus glove + Vive tracker for hand and wrist tracking
-- **Retargeter**: Converts hand tracking data to robot commands
+- **Retargeter**: Converts hand tracking data with absolute wrist poses to control commands for the robotic hand and arm actuation commands, using a hand retargeter and SE3 task space impedance controller, respectively.
 - **Recording System**: Saves demonstrations for imitation learning
 
 ## Setup
 
 ### Hardware Prerequisitess
 
-1. Manus Gloves, e.g., Metagloves Pro. Only the left one is really needed.
+1. Manus Gloves, e.g., Metagloves Pro. Only one is really needed / needs to be turned on.
 
 2. One HTC Vive tracker 3.0 and at least 1 x SteamVR Base Station, preferably two of them (configured at different channels).
 
@@ -32,8 +32,8 @@ sst
 
 ### Session Setup
 
-1. Launch SteamVR on the Windows machine, turn on the tracker and ensure it is visible. If you are not using a headless 
-2. Start Manus Core, put on the left Manus glove attached with tracker, ensure both visible and calibrate them if needed.
+1. Launch SteamVR on the Windows machine, turn on the tracker and ensure it is visible. If you are not using a [headless SteamVR setup](https://www.youtube.com/watch?v=IfZGeXMG78c), make sure you to turn on your headset and connect with SteamVR.
+2. Start Manus Core, put on the Manus glove attached with the tracker, ensure both are visible and calibrate them if needed.
 3. Assign the tracker to the glove if not already done so.
 
 ## Usage
@@ -162,5 +162,3 @@ Thresholds can be adjusted in `ManusViveFrankaRetargeter._calculate_gripper_stat
 - [Isaac Lab Documentation](https://isaac-sim.github.io/IsaacLab/)
 - [Manus SDK Documentation](https://docs.manus-meta.com/)
 - [OpenXR Specification](https://www.khronos.org/openxr/)
-
-

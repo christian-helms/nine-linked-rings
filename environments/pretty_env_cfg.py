@@ -1,3 +1,8 @@
+# Copyright (c) 2022-2025, The Isaac Lab Project Developers (https://github.com/isaac-sim/IsaacLab/blob/main/CONTRIBUTORS.md).
+# All rights reserved.
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 """Configuration for Nine Linked Rings environment with RM75+Inspire hand."""
 
 from __future__ import annotations
@@ -5,32 +10,27 @@ from __future__ import annotations
 if __name__ == "__main__":
     import argparse
     import torch
+
     from isaaclab.app import AppLauncher
 
-    parser = argparse.ArgumentParser(
-        description="Tutorial on creating a cartpole base environment."
-    )
-    parser.add_argument(
-        "--num_envs", type=int, default=1, help="Number of environments to spawn."
-    )
+    parser = argparse.ArgumentParser(description="Tutorial on creating a cartpole base environment.")
+    parser.add_argument("--num_envs", type=int, default=1, help="Number of environments to spawn.")
     AppLauncher.add_app_launcher_args(parser)
     args_cli = parser.parse_args()
     app_launcher = AppLauncher(args_cli)
     simulation_app = app_launcher.app
 
 
+import isaaclab.envs.mdp as mdp
 import isaaclab.sim as sim_utils
-from isaaclab.actuators import ImplicitActuatorCfg
-from isaaclab.assets import ArticulationCfg, AssetBaseCfg
-from isaaclab_assets.robots.shadow_hand import SHADOW_HAND_CFG
-from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR
-from isaaclab.envs import ManagerBasedEnvCfg, ManagerBasedEnv
+from assets.assemblies_cfg import get_svh_left_cfg
+from isaaclab.assets import AssetBaseCfg
+from isaaclab.controllers import DifferentialIKControllerCfg
+from isaaclab.envs import ManagerBasedEnv, ManagerBasedEnvCfg
 from isaaclab.managers import EventTermCfg as EventTerm
-from isaaclab.managers import ObservationGroupCfg as ObsGroup
-from isaaclab.managers import ObservationTermCfg as ObsTerm
-from isaaclab.managers import SceneEntityCfg
 from isaaclab.scene import InteractiveSceneCfg
 from isaaclab.utils import configclass
+from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR
 
 
 @configclass
@@ -58,95 +58,32 @@ class NineLinkedRingsSceneCfg(InteractiveSceneCfg):
         prim_path="{ENV_REGEX_NS}/NineLinkedRings",
         spawn=sim_utils.UsdFileCfg(
             usd_path="./assets/nine_linked_rings/nine_linked_rings.usda",
+            scale=(0.15, 0.15, 0.15),
         ),
         init_state=AssetBaseCfg.InitialStateCfg(
-            pos=(0.0, 0.0, 1.0),  # Position in front of robot
+            pos=(0.55, -0.3, 0.7),  # Position in front of robot
+            rot=(0.7071, 0.0, 0.0, 0.7071),
         ),
     )
 
-    # hand = SHADOW_HAND_CFG.replace(prim_path="{ENV_REGEX_NS}/Hand")
+    robot = get_svh_left_cfg()
 
-    # arm = ArticulationCfg(
-    #     prim_path="{ENV_REGEX_NS}/Robot",
-    #     spawn=sim_utils.UrdfFileCfg(
-    #         asset_path="/home/chris/nine-linked-rings/dex-urdf/robots/assembly/rm75_inspire/rm75_inspire_left_hand.urdf",
-    #         activate_contact_sensors=True,
-    #         rigid_props=sim_utils.RigidBodyPropertiesCfg(
-    #             disable_gravity=False,
-    #             max_depenetration_velocity=5.0,
-    #         ),
-    #         articulation_props=sim_utils.ArticulationRootPropertiesCfg(
-    #             enabled_self_collisions=False,
-    #             solver_position_iteration_count=8,
-    #             solver_velocity_iteration_count=0,
-    #         ),
-    #     ),
-    #     init_state=ArticulationCfg.InitialStateCfg(
-    #         # Note: URDF includes world_joint with transform: xyz="0.138497 0 0" rpy="-1.57079 1.57079 0"
-    #         # Adjust pos/rot here if robot appears in wrong location/orientation
-    #         pos=(0.0, 0.0, 0.0),
-    #         rot=(0.7071, 0, 0, 0.7071),  # Quaternion for 90° around X (w,x,y,z)
-    #         joint_pos={
-    #             # Arm joints - neutral pose
-    #             "joint_1": 0.0,
-    #             "joint_2": 0.0,
-    #             "joint_3": 0.0,
-    #             "joint_4": 1.57,  # 90 degrees
-    #             "joint_5": 0.0,
-    #             "joint_6": 0.0,
-    #             "joint_7": 0.0,
-    #             # Hand joints - open hand
-    #             "index_proximal_joint": 0.0,
-    #             "index_intermediate_joint": 0.0,
-    #             "middle_proximal_joint": 0.0,
-    #             "middle_intermediate_joint": 0.0,
-    #             "ring_proximal_joint": 0.0,
-    #             "ring_intermediate_joint": 0.0,
-    #             "pinky_proximal_joint": 0.0,
-    #             "pinky_intermediate_joint": 0.0,
-    #             "thumb_proximal_yaw_joint": 0.0,
-    #             "thumb_proximal_pitch_joint": 0.0,
-    #             "thumb_intermediate_joint": 0.0,
-    #             "thumb_distal_joint": 0.0,
-    #         },
-    #     ),
-    #     actuators={
-    #         # Arm actuators
-    #         "arm": ImplicitActuatorCfg(
-    #             joint_names_expr=["joint_[1-7]"],
-    #             effort_limit=87.0,
-    #             velocity_limit=2.175,
-    #             stiffness=80.0,
-    #             damping=4.0,
-    #         ),
-    #         # Finger actuators - precise control
-    #         "fingers": ImplicitActuatorCfg(
-    #             joint_names_expr=[
-    #                 "index_.*_joint",
-    #                 "middle_.*_joint",
-    #                 "ring_.*_joint",
-    #                 "pinky_.*_joint",
-    #             ],
-    #             effort_limit=5.0,
-    #             velocity_limit=3.0,
-    #             stiffness=20.0,
-    #             damping=1.0,
-    #         ),
-    #         # Thumb actuators - separate for better control
-    #         "thumb": ImplicitActuatorCfg(
-    #             joint_names_expr=["thumb_.*_joint"],
-    #             effort_limit=5.0,
-    #             velocity_limit=3.0,
-    #             stiffness=20.0,
-    #             damping=1.0,
-    #         ),
-    #     },
-    # )
+    ee_start = AssetBaseCfg(
+        prim_path="{ENV_REGEX_NS}/ee_start",
+        spawn=sim_utils.UsdFileCfg(
+            usd_path=f"{ISAAC_NUCLEUS_DIR}/Props/UIElements/frame_prim.usd",
+            scale=(0.001, 0.001, 0.001),
+        ),
+        init_state=AssetBaseCfg.InitialStateCfg(
+            pos=(0.1952, 0.0, 0.65274),
+            rot=(-0.27240371, -0.65212406, -0.27199824, -0.65310595),
+        ),
+    )
 
 
 @configclass
-class CommandsCfg:
-    """Command specifications for the environment."""
+class ObservationsCfg:
+    """Observation specifications for the environment."""
 
     pass
 
@@ -155,86 +92,69 @@ class CommandsCfg:
 class ActionsCfg:
     """Action specifications for the environment."""
 
-    # Full dexterous hand control
-    # test_action: mdp.JointPositionActionCfg = mdp.JointPositionActionCfg(
-    #     asset_name="hand",
-    #     joint_names=["robot0_MFJ2"],
-    #     scale=1.0,
-    #     use_default_offset=True,
-    # )
+    arm_action = mdp.actions.DifferentialInverseKinematicsActionCfg(
+        asset_name="robot",
+        joint_names=["panda_joint.*"],
+        body_name="panda_hand",  # or left tower (need to try it out)
+        scale=1.0,
+        controller=DifferentialIKControllerCfg(
+            command_type="pose",
+            use_relative_mode=False,
+            ik_method="pinv",
+        ),
+    )
 
-
-@configclass
-class ObservationsCfg:
-    """Observation specifications for the environment."""
-
-    # @configclass
-    # class PolicyCfg(ObsGroup):
-    #     """Observations for policy group."""
-
-    #     # Robot state
-    #     joint_pos = ObsTerm(
-    #         func=mdp.joint_pos_rel, params={"asset_cfg": SceneEntityCfg("robot")}
-    #     )
-    #     joint_vel = ObsTerm(
-    #         func=mdp.joint_vel_rel, params={"asset_cfg": SceneEntityCfg("robot")}
-    #     )
-
-    #     # Hand pose
-    #     hand_pose = ObsTerm(
-    #         func=mdp.root_pos_w,
-    #         params={"asset_cfg": SceneEntityCfg("robot", body_names=["rm75_link_7"])},
-    #     )
-    #     hand_quat = ObsTerm(
-    #         func=mdp.root_quat_w,
-    #         params={"asset_cfg": SceneEntityCfg("robot", body_names=["rm75_link_7"])},
-    #     )
-
-    #     def __post_init__(self):
-    #         self.enable_corruption = True
-    #         self.concatenate_terms = True
-
-    # Observation groups
-    # policy: PolicyCfg = PolicyCfg()
+    hand_action = mdp.actions.JointPositionActionCfg(
+        asset_name="robot",
+        joint_names=[
+            "Left_Hand_Thumb_Opposition",
+            "Left_Hand_Thumb_Flexion",
+            "Left_Hand_Index_Finger_Proximal",
+            "Left_Hand_Index_Finger_Distal",
+            "Left_Hand_Middle_Finger_Proximal",
+            "Left_Hand_Middle_Finger_Distal",
+            "Left_Hand_Ring_Finger",
+            "Left_Hand_Pinky",
+            "Left_Hand_Finger_Spread",
+        ],
+        scale=1.0,
+        use_default_offset=True,
+    )
 
 
 @configclass
 class EventCfg:
     """Configuration for events."""
 
-    # reset_robot_joints = EventTerm(
-    #     func=mdp.reset_joints_by_scale,
-    #     mode="reset",
-    #     params={
-    #         "position_range": (0.5, 1.5),
-    #         "velocity_range": (0.0, 0.0),
-    #     },
-    # )
+    reset_scene_defaults: EventTerm = EventTerm(
+        func=mdp.reset_scene_to_default,
+        mode="reset",
+        params={"reset_joint_targets": True},
+    )
 
 
 @configclass
 class NineLinkedRingsEnvCfg(ManagerBasedEnvCfg):
     """Configuration for the Nine Linked Rings environment."""
 
-    scene: NineLinkedRingsSceneCfg = NineLinkedRingsSceneCfg(
-        num_envs=1, env_spacing=2.5
-    )
+    seed: int = 1337
+
+    scene: NineLinkedRingsSceneCfg = NineLinkedRingsSceneCfg(num_envs=1, env_spacing=2.5)
 
     observations: ObservationsCfg = ObservationsCfg()
     actions: ActionsCfg = ActionsCfg()
-    commands: CommandsCfg = CommandsCfg()
     events: EventCfg = EventCfg()
 
     def __post_init__(self):
         """Post initialization."""
         # Viewer settings
-        self.viewer.eye = (1.0, 1.0, 1.3)
-        self.viewer.lookat = (0.0, 0.0, 1.0)
+        self.viewer.eye = (1.2, 0.9, 1.3)
+        self.viewer.lookat = (0.5, 0.0, 0.7)
 
         # Simulation settings
-        self.decimation = 1
-        self.sim.dt = 1.0 / 120.0
-        self.sim.render_interval = 1
+        self.decimation = 4
+        self.sim.dt = 1.0 / 180.0
+        self.sim.render_interval = 2
         self.sim.physics_material = sim_utils.RigidBodyMaterialCfg(
             static_friction=1.0,
             dynamic_friction=1.0,
@@ -250,19 +170,18 @@ def main():
     env_cfg.scene.num_envs = args_cli.num_envs
     env_cfg.sim.device = args_cli.device
     env = ManagerBasedEnv(cfg=env_cfg)
+    print(env.step_dt)
+    print(env.physics_dt)
 
     count = 0
-    joint_efforts = 0.5 * (torch.rand_like(env.action_manager.action) - 0.5)
+    env.reset()
     while simulation_app.is_running():
         with torch.inference_mode():
-            # reset
-            if count % env_cfg.episode_length_s == 0:
-                count = 0
-                env.reset()
-                print("-" * 80)
-                print("[INFO]: Resetting environment...")
-
-            obs, _ = env.step(joint_efforts)
+            ee_goal_transl, ee_goal_quat = env.scene["ee_start"].get_local_poses()
+            action = torch.cat((ee_goal_transl, ee_goal_quat), dim=1)
+            action = torch.cat((action, torch.zeros(1, 9, device=env.device)), dim=1)
+            obs, _ = env.step(action)
+            # obs, _ = env.step(torch.randn_like(env.action_manager.action))
             count += 1
 
     env.close()
