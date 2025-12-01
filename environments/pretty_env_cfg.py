@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
 import isaaclab.envs.mdp as mdp
 import isaaclab.sim as sim_utils
-from assets.assemblies_cfg import get_svh_left_cfg
+from assets.assemblies_cfg import get_allegro_right_cfg
 from isaaclab.assets import AssetBaseCfg
 from isaaclab.controllers import DifferentialIKControllerCfg
 from isaaclab.envs import ManagerBasedEnv, ManagerBasedEnvCfg
@@ -58,15 +58,15 @@ class NineLinkedRingsSceneCfg(InteractiveSceneCfg):
         prim_path="{ENV_REGEX_NS}/NineLinkedRings",
         spawn=sim_utils.UsdFileCfg(
             usd_path="./assets/nine_linked_rings/nine_linked_rings.usda",
-            scale=(0.15, 0.15, 0.15),
+            scale=(0.3, 0.3, 0.3),
         ),
         init_state=AssetBaseCfg.InitialStateCfg(
-            pos=(0.55, -0.3, 0.7),  # Position in front of robot
-            rot=(0.7071, 0.0, 0.0, 0.7071),
+            pos=(1.35, 0.0, 0.5),  # Position in front of robot
+            rot=(0.0, 0.0, 0.0, 1.0),
         ),
     )
 
-    robot = get_svh_left_cfg()
+    robot = get_allegro_right_cfg()
 
     ee_start = AssetBaseCfg(
         prim_path="{ENV_REGEX_NS}/ee_start",
@@ -76,7 +76,7 @@ class NineLinkedRingsSceneCfg(InteractiveSceneCfg):
         ),
         init_state=AssetBaseCfg.InitialStateCfg(
             pos=(0.1952, 0.0, 0.65274),
-            rot=(-0.27240371, -0.65212406, -0.27199824, -0.65310595),
+            rot=(0.5, 0.5, 0.5, 0.5),
         ),
     )
 
@@ -101,24 +101,54 @@ class ActionsCfg:
             command_type="pose",
             use_relative_mode=False,
             ik_method="pinv",
-        ),
+         ),
     )
+
+    # TODO: buggy
+    # arm_action = mdp.actions.OperationalSpaceControllerActionCfg(
+    #     asset_name="robot",
+    #     joint_names=["panda_joint.*"],
+    #     body_name="panda_hand",
+    #     controller_cfg=OperationalSpaceControllerCfg(
+    #         target_types=["pose_abs"],
+    #         motion_control_axes_task=(1, 1, 1, 1, 1, 1),
+    #         impedance_mode="fixed",
+    #         motion_stiffness_task=(150.0, 150.0, 150.0, 150.0, 150.0, 150.0),
+    #         motion_damping_ratio_task=(1.0, 1.0, 1.0, 1.0, 1.0, 1.0),
+    #         gravity_compensation=True,
+    #         inertial_dynamics_decoupling=False,
+    #         nullspace_control="position",
+    #         nullspace_stiffness=5.0,
+    #         nullspace_damping_ratio=1.0,
+    #     ),
+    #     position_scale=1.0,
+    #     orientation_scale=1.0,
+    #     nullspace_joint_pos_target="center",
+    # )
 
     hand_action = mdp.actions.JointPositionActionCfg(
         asset_name="robot",
         joint_names=[
-            "Left_Hand_Thumb_Opposition",
-            "Left_Hand_Thumb_Flexion",
-            "Left_Hand_Index_Finger_Proximal",
-            "Left_Hand_Index_Finger_Distal",
-            "Left_Hand_Middle_Finger_Proximal",
-            "Left_Hand_Middle_Finger_Distal",
-            "Left_Hand_Ring_Finger",
-            "Left_Hand_Pinky",
-            "Left_Hand_Finger_Spread",
+            "joint_0_0",
+            "joint_1_0",
+            "joint_2_0",
+            "joint_3_0",
+            "joint_4_0",
+            "joint_5_0",
+            "joint_6_0",
+            "joint_7_0",
+            "joint_8_0",
+            "joint_9_0",
+            "joint_10_0",
+            "joint_11_0",
+            "joint_12_0",
+            "joint_13_0",
+            "joint_14_0",
+            "joint_15_0",
         ],
         scale=1.0,
-        use_default_offset=True,
+        use_default_offset=False,
+        preserve_order=True,
     )
 
 
@@ -148,13 +178,13 @@ class NineLinkedRingsEnvCfg(ManagerBasedEnvCfg):
     def __post_init__(self):
         """Post initialization."""
         # Viewer settings
-        self.viewer.eye = (1.2, 0.9, 1.3)
-        self.viewer.lookat = (0.5, 0.0, 0.7)
+        self.viewer.eye = (-0.5, 0.3, 1.4)
+        self.viewer.lookat = (0.2, 0.0, 1.0)
 
         # Simulation settings
-        self.decimation = 4
-        self.sim.dt = 1.0 / 180.0
-        self.sim.render_interval = 2
+        self.decimation = 3
+        self.sim.dt = 1.0 / 90.0
+        self.sim.render_interval = 1
         self.sim.physics_material = sim_utils.RigidBodyMaterialCfg(
             static_friction=1.0,
             dynamic_friction=1.0,
@@ -168,10 +198,12 @@ class NineLinkedRingsEnvCfg(ManagerBasedEnvCfg):
 def main():
     env_cfg = NineLinkedRingsEnvCfg()
     env_cfg.scene.num_envs = args_cli.num_envs
-    env_cfg.sim.device = args_cli.device
+    # Override device to CPU if running in XR mode to avoid CUDA conflicts
+    if args_cli.device == "cpu":
+        env_cfg.sim.device = "cpu"
+    else:
+        env_cfg.sim.device = args_cli.device
     env = ManagerBasedEnv(cfg=env_cfg)
-    print(env.step_dt)
-    print(env.physics_dt)
 
     count = 0
     env.reset()
@@ -179,9 +211,8 @@ def main():
         with torch.inference_mode():
             ee_goal_transl, ee_goal_quat = env.scene["ee_start"].get_local_poses()
             action = torch.cat((ee_goal_transl, ee_goal_quat), dim=1)
-            action = torch.cat((action, torch.zeros(1, 9, device=env.device)), dim=1)
+            action = torch.cat((action, torch.zeros(1, 16, device=env.device)), dim=1)
             obs, _ = env.step(action)
-            # obs, _ = env.step(torch.randn_like(env.action_manager.action))
             count += 1
 
     env.close()

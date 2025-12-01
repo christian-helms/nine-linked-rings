@@ -1,0 +1,27 @@
+side: right
+assembly_cfg:
+  _target_: assets.assemblies_cfg.get_allegro_right_cfg
+joint_names:
+  - joint_0_0
+  - joint_1_0
+  - joint_2_0
+  - joint_3_0
+  - joint_4_0
+  - joint_5_0
+  - joint_6_0
+  - joint_7_0
+  - joint_8_0
+  - joint_9_0
+  - joint_10_0
+  - joint_11_0
+  - joint_12_0
+  - joint_13_0
+  - joint_14_0
+  - joint_15_0
+retargeter:
+  _target_: teleoperation.retargeters.allegro_hand_retargeter.AllegroHandRetargeter
+  cfg:
+    _target_: teleoperation.retargeters.allegro_hand_retargeter.AllegroHandRetargeterCfg
+    hand_side: right
+    ckpt_tag: "my_right_hand_0"
+    sim_device: cpu

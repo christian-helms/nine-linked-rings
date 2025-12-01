@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "GeoRT/geort/mocap"
+		},
+		{
+			"path": "../MANUS_Core_3.0.1_SDK"
 		}
 	],
 	"settings": {

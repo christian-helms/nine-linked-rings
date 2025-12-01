@@ -64,8 +64,8 @@ known_task_firstparty = "isaaclab_tasks"
 known_local_folder = "config"
 
 [tool.pyright]
-include = ["source", "scripts", "teleoperation", "environments", "evaluation", "learning", "GeoRT"]
-extraPaths = ["GeoRT"]
+include = ["scripts", "teleoperation", "environments", "evaluation", "learning", "GeoRT"]
+extraPaths = ["GeoRT", "source/isaaclab"]
 exclude = [
     "**/__pycache__",
     "**/_isaac_sim",

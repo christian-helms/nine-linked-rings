@@ -1,70 +1,83 @@
 import torch
 
 from isaaclab.devices.retargeter_base import RetargeterBase, RetargeterCfg
-from isaaclab.devices.openxr.openxr_device import OpenXRDevice
-from isaaclab.utils.math import subtract_frame_transforms
+
+from isaaclab.utils.math import (
+    quat_mul,
+    subtract_frame_transforms,
+)
 
 
 class WristRetargeterCfg(RetargeterCfg):
-    def __init__(self, hand_side: str):
+    def __init__(self, hand_side: str, sim_device: str):
         super().__init__()
-        if hand_side not in ["left", "right"]:
-            raise ValueError(
-                f"Invalid hand side: {hand_side}. Must be 'left' or 'right'."
-            )
-        self.hand_side = (
-            OpenXRDevice.TrackingTarget.HAND_LEFT
-            if hand_side == "left"
-            else OpenXRDevice.TrackingTarget.HAND_RIGHT
-        )
+        self.hand_side = hand_side
+        self.sim_device = sim_device
 
 
 class WristRetargeter(RetargeterBase):
     def __init__(self, cfg: WristRetargeterCfg):
         super().__init__(cfg)
         self.hand_side = cfg.hand_side
+        self.eTn = torch.tensor(
+            [  # see the note in self.retarget() for the meaning of this matrix
+                [1, 0, 0, 0],
+                [0, 0, -1, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 1],
+            ],
+            dtype=torch.float32,
+            device=self._sim_device,
+        )
+        self.neutral_pose_is_set = False
 
-    def set_origin_pos(self, pos: torch.Tensor) -> None:
+    def set_ee_start_pose(self, pose: tuple[torch.Tensor, torch.Tensor]) -> None:
+        self.ee_start_pos = pose[0].squeeze(0).to(self._sim_device)
+        self.ee_start_quat = pose[1].squeeze(0).to(self._sim_device)
+
+    def set_neutral_pose(self, pose: torch.Tensor) -> None:
         """The retargeted pose is relative to this pose."""
-        self.origin_pos = pos
+        self.neutral_pose = pose
+        self.neutral_pose_is_set = True
 
-    def retarget(self, skeleton_data: dict) -> torch.Tensor:
+    def retarget(self, mocap_result: dict) -> torch.Tensor:
+        """There are 4 frames involved in the retargeting:
+        - o: origin tracker frame
+        - n: neutral hand pose frame
+        - e: end effector frame
+        - p: pose frame
+
+        By aTb we denote the homogeneous transformation matrix mapping points in coordinate frame b to a.
+
+        We want to output eTp (in translation + quaternion form) and we know:
+        - oTn (self.neutral_pose)
+        - oTp (mocap_result.get("wrist_pos"), mocap_result.get("wrist_quat"))
+        - eTn (defined in the constructor)
+
+        So we can compute eTp as eTp = eTn * nTo * oTp and then convert to translation + quaternion form.
         """
-        Args:
-            skeleton_data: dict of the following structure
-                <TrackingTarget.HAND_LEFT: 0>: {
-                    'palm': array([0., 0., 0., 1., 0., 0., 0.], dtype=float32),
-                    'wrist': array([0., 0., 0., 1., 0., 0., 0.], dtype=float32),
-                    'thumb_metacarpal': array([0., 0., 0., 1., 0., 0., 0.], dtype=float32),
-                    'thumb_proximal': ...,
-                    'thumb_distal': ...,
-                    'thumb_tip': ...,
-                    'index_metacarpal': ...,
-                    'index_proximal': ...,
-                    'index_intermediate': ...,
-                    'index_distal': ..,
-                    'index_tip': ...,
-                    ...
-                    'middle_metacarpal': ...,
-                    ...
-                    'ring_metacarpal': ...,
-                    ...
-                    'little_metacarpal': ...,
-                ...}
-                <TrackingTarget.HAND_RIGHT: 1>: ...
-                <TrackingTarget.HEAD: 2>: array([0., 0., 0., 1., 0., 0., 0.], dtype=float32)}
+        wrist_pos = torch.tensor(
+            mocap_result.get("wrist_pos"), dtype=torch.float32, device=self._sim_device
+        )
+        wrist_quat = torch.tensor(
+            mocap_result.get("wrist_quat"), dtype=torch.float32, device=self._sim_device
+        )
 
-            Returns:
-        """
+        if not self.neutral_pose_is_set:
+            return torch.cat([wrist_pos, wrist_quat], dim=0)
 
-        hand_data = skeleton_data[self.hand_side]
+        pos_delta = wrist_pos - self.neutral_pose[:3]
+        pos_delta = self.eTn[:3, :3] @ pos_delta
+        ee_goal_pos = self.ee_start_pos + pos_delta
 
-        wrist_pose = torch.tensor(hand_data.get("wrist"), dtype=torch.float32)
+        _, test_quat = subtract_frame_transforms(
+            wrist_pos, wrist_quat, self.neutral_pose[:3], self.neutral_pose[3:]
+        )
+        quat_delta = torch.tensor(
+            [test_quat[0], test_quat[2], -test_quat[1], -test_quat[3]],
+            dtype=torch.float32,
+            device=self._sim_device,
+        )
+        ee_goal_quat = quat_mul(quat_delta, self.ee_start_quat)
 
-        if not hasattr(self, "origin_pos"):
-            # query during calibration
-            return wrist_pose.to(self._sim_device)
-
-        retargeted_pos = wrist_pose[:3] - self.origin_pos
-
-        return torch.cat([retargeted_pos, wrist_pose[3:]], dim=0).to(self._sim_device)
+        return torch.cat([ee_goal_pos, ee_goal_quat], dim=0)

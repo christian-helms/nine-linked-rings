@@ -35,25 +35,44 @@ FRANKA_ARM_CFG = ArticulationCfg(
             "panda_joint4": -2.6537,
             "panda_joint5": 0.0,
             "panda_joint6": 2.8588,
-            "panda_joint7": 0.0,
+            "panda_joint7": -0.7853981633974483, # -45 degrees
         },
     ),
     actuators={
         "panda_shoulder": ImplicitActuatorCfg(
             joint_names_expr=["panda_joint[1-4]"],
             effort_limit_sim=87.0,
-            stiffness=10000.0,
+            stiffness=10_000.0,
             damping=1000.0,
         ),
         "panda_forearm": ImplicitActuatorCfg(
             joint_names_expr=["panda_joint[5-7]"],
             effort_limit_sim=12.0,
-            stiffness=10000.0,
+            stiffness=10_000.0,
             damping=1000.0,
         ),
     },
     soft_joint_pos_limit_factor=1.0,
 )
+
+
+def get_allegro_right_cfg():
+    ALLEGRO_RIGHT_CFG = deepcopy(FRANKA_ARM_CFG)
+    ALLEGRO_RIGHT_CFG.spawn.variants["Gripper"] = "AllegroHand_right"  # pyright: ignore[reportAttributeAccessIssue, reportOptionalMemberAccess]
+    ALLEGRO_RIGHT_CFG.init_state.joint_pos["joint_([0-9]|1[0-1])_0"] = 0.0 # fingers
+    # thumb
+    ALLEGRO_RIGHT_CFG.init_state.joint_pos["joint_12_0"] = 0.5
+    ALLEGRO_RIGHT_CFG.init_state.joint_pos["joint_13_0"] = 0.2
+    ALLEGRO_RIGHT_CFG.init_state.joint_pos["joint_14_0"] = 0.75
+    ALLEGRO_RIGHT_CFG.init_state.joint_pos["joint_15_0"] = 0.5
+    ALLEGRO_RIGHT_CFG.actuators["fingers"] = ImplicitActuatorCfg(
+        joint_names_expr=["joint_.*_0"],
+        effort_limit_sim=10.0,
+        velocity_limit_sim=100.0,
+        stiffness=400.0,
+        damping=10.0,
+    )
+    return ALLEGRO_RIGHT_CFG
 
 
 def get_orca_left_cfg():

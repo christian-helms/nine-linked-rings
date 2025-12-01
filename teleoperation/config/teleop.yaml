@@ -3,24 +3,22 @@ hydra:
     chdir: false
 
 defaults:
-  - hand: svh_left
+  - hand: allegro_right
   - _self_
 
 env:
   _target_: environments.pretty_env_cfg.NineLinkedRingsEnvCfg
 
 device:
-  _target_: isaaclab.devices.openxr.ManusVive
+  _target_: teleoperation.geort_device.ManusViveGeortDevice
   cfg:
-    _target_: isaaclab.devices.openxr.ManusViveCfg
+    _target_: teleoperation.geort_device.ManusViveGeortDeviceCfg
     xr_cfg:
       _target_: isaaclab.devices.openxr.XrCfg
-      anchor_pos: [0.0, 0.0, 0.0]
-      anchor_rot: [1.0, 0.0, 0.0, 0.0]
-      near_plane: 0.1
   retargeters:
     - _target_: teleoperation.retargeters.wrist_retargeter.WristRetargeter
       cfg:
         _target_: teleoperation.retargeters.wrist_retargeter.WristRetargeterCfg
         hand_side: ${hand.side}
+        sim_device: cpu
     - ${hand.retargeter}

@@ -17,6 +17,29 @@
             }
         },
         {
+            "label": "Env W/O Teleop",
+            "type": "shell",
+            "command": "/bin/bash",
+            "args": [
+                "-lc",
+                "source ${workspaceFolder}/nine-linked-rings-venv/bin/activate && python ${workspaceFolder}/environments/pretty_env_cfg.py"
+            ],
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "IsaacSim",
+            "type": "shell",
+            "command": "/bin/bash",
+            "args": [
+                "-lc",
+                "source ${workspaceFolder}/nine-linked-rings-venv/bin/activate && ./_isaac_sim/isaac-sim.sh"
+            ],
+            "problemMatcher": []
+        },
+        {
             "label": "Collect Manus Mocap Data",
             "type": "shell",
             "command": "/bin/bash",

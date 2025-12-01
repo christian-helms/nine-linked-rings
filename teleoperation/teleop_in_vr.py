@@ -7,12 +7,6 @@ import hydra
 from omegaconf import DictConfig
 
 import torch
-from isaaclab.utils.math import quat_mul
-from isaaclab.utils.math import quat_from_matrix
-
-from geort.mocap.manus_mocap import ManusMocap
-from geort.env.hand import HandKinematicModel
-from geort import load_model, get_config
 
 # Parse arguments
 parser = argparse.ArgumentParser(
@@ -57,6 +51,7 @@ args_cli = parser.parse_args()
 
 # Set XR mode for ManusVive
 args_cli.xr = True
+args_cli.device = "cpu"
 
 # Launch the simulator
 
@@ -68,13 +63,10 @@ simulation_app = app_launcher.app
 from isaaclab.envs import ManagerBasedEnv
 
 import omni.log
-import omni.usd
 
 from isaaclab.devices.device_base import DeviceBase
 from isaaclab.devices.openxr.openxr_device import OpenXRDevice  # noqa: F401
-from isaaclab.devices.openxr.manus_vive import ManusVive, ManusViveCfg  # noqa: F401
 from isaaclab.devices.openxr.xr_cfg import XrCfg  # noqa: F401
-from isaaclab.scene import InteractiveScene
 from teleoperation.recording_utils import DemonstrationRecorder
 
 
@@ -142,15 +134,16 @@ def _calibrate_device_frame(device: DeviceBase) -> None:
 
     neutral_pose = _record_neutral_position(device)
 
-    device._retargeters[0].set_origin_pos(neutral_pose[:3])  # type: ignore
+    device._retargeters[0].set_neutral_pose(neutral_pose)  # type: ignore
 
     print("✓ Device calibrated successfully")
 
 
-def _setup_device(cfg: DictConfig) -> DeviceBase:
+def _setup_device(cfg: DictConfig, env: ManagerBasedEnv) -> DeviceBase:
     try:
         device = hydra.utils.instantiate(cfg.device)
         _calibrate_device_frame(device)
+        device._retargeters[0].set_ee_start_pose(env.scene["ee_start"].get_local_poses())
         device.add_callback("START", start_teleoperation)
         device.add_callback("STOP", stop_teleoperation)
         device.add_callback("RESET", reset_environment)
@@ -169,7 +162,19 @@ def main(cfg: DictConfig) -> None:
     """Main teleoperation loop with recording capability."""
 
     omni.log.info("Creating environment...")
+    
+    # Force CPU device for simulation to avoid CUDA conflicts with OpenXR
+    # The environment config is loaded via hydra.utils.instantiate(cfg.env)
+    # which refers to NineLinkedRingsEnvCfg. We need to override the device in the instantiated config
+    # or ensure the passed config has the correct value if possible.
+    # However, cfg.env is a DictConfig pointing to the class. 
+    
+    # Instead of modifying cfg.env directly which might be tricky if structure doesn't match,
+    # we can modify the instantiated config object before creating the environment.
+    
     env_cfg = hydra.utils.instantiate(cfg.env)
+    # Force device to CPU
+    env_cfg.sim.device = "cpu"
     env_cfg.scene.robot = hydra.utils.call(cfg.hand.assembly_cfg)
     env_cfg.actions.hand_action.joint_names = list(cfg.hand.joint_names)
     env_cfg.scene.num_envs = 1
@@ -177,7 +182,7 @@ def main(cfg: DictConfig) -> None:
     omni.log.info("Environment created successfully")
 
     omni.log.info("Setting up device and retargeter...")
-    device = _setup_device(cfg)
+    device = _setup_device(cfg, env)
     omni.log.info("Device setup successfully")
 
     def reset_environment():
@@ -206,18 +211,6 @@ def main(cfg: DictConfig) -> None:
             with torch.inference_mode():
                 action = action.unsqueeze(0)  # add batch dimension
                 action = action.to(env.device)
-
-                wrist_pos = action[:, :3]
-                wrist_quat = action[:, 3:7]
-                ee_start_transl, ee_start_quat = env.scene["ee_start"].get_local_poses()
-
-                ee_goal_pos = ee_start_transl + wrist_pos
-                ee_goal_quat = quat_mul(wrist_quat, ee_start_quat)
-
-                action[:, :3] = ee_goal_pos
-                action[:, 3:7] = ee_goal_quat
-
-                action[:, 7:] = 0.0
 
                 env.step(action=action)
 
