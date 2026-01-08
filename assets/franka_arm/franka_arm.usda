@@ -1,0 +1,1095 @@
+#usda 1.0
+(
+    customLayerData = {
+        dictionary cameraSettings = {
+            dictionary Front = {
+                double3 position = (5, 0, 0)
+                double radius = 5
+            }
+            dictionary Perspective = {
+                double3 position = (1.1922778469677422, 0.8958136597172773, 0.8808644805847119)
+                double3 target = (-0.9862486417046712, -1.5691421487394916, 0.42487400064012476)
+            }
+            dictionary Right = {
+                double3 position = (0, -5, 0)
+                double radius = 5
+            }
+            dictionary Top = {
+                double3 position = (0, 0, 5)
+                double radius = 5
+            }
+            string boundCamera = "/OmniverseKit_Persp"
+        }
+        dictionary omni_layer = {
+            string authoring_layer = "./franka_arm.usda"
+            dictionary locked = {
+            }
+            dictionary muteness = {
+            }
+        }
+        dictionary renderSettings = {
+        }
+        dictionary xrSettings = {
+            string "xrstage:customAnchor" = ""
+            string "xrstage:profile:ar:anchorMode" = "scene origin"
+            string "xrstage:profile:ar:customAnchor" = ""
+            string "xrstage:profile:vr:customAnchor" = ""
+        }
+    }
+    defaultPrim = "franka"
+    endTimeCode = 1000000
+    metersPerUnit = 1
+    startTimeCode = 0
+    timeCodesPerSecond = 60
+    upAxis = "Z"
+)
+
+def "Render" (
+    hide_in_stage_window = true
+    no_delete = true
+)
+{
+    def "OmniverseKit"
+    {
+        def "HydraTextures" (
+            hide_in_stage_window = true
+            no_delete = true
+        )
+        {
+            def RenderProduct "omni_kit_widget_viewport_ViewportTexture_0" (
+                prepend apiSchemas = ["OmniRtxSettingsCommonAdvancedAPI_1", "OmniRtxSettingsRtAdvancedAPI_1", "OmniRtxSettingsPtAdvancedAPI_1", "OmniRtxPostColorGradingAPI_1", "OmniRtxPostChromaticAberrationAPI_1", "OmniRtxPostBloomPhysicalAPI_1", "OmniRtxPostMatteObjectAPI_1", "OmniRtxPostCompositingAPI_1", "OmniRtxPostDofAPI_1", "OmniRtxPostMotionBlurAPI_1", "OmniRtxPostTvNoiseAPI_1", "OmniRtxPostTonemapIrayReinhardAPI_1", "OmniRtxPostDebugSettingsAPI_1", "OmniRtxDebugSettingsAPI_1"]
+                hide_in_stage_window = true
+                no_delete = true
+            )
+            {
+                rel camera = </OmniverseKit_Persp>
+                token omni:rtx:background:source:texture:textureMode = "repeatMirrored"
+                token omni:rtx:background:source:type = "domeLight"
+                bool omni:rtx:dlss:frameGeneration = 0
+                bool omni:rtx:material:db:nonVisualMaterialCSV:enabled = 0
+                bool omni:rtx:material:db:syncLoads = 1
+                token omni:rtx:post:dlss:execMode = "performance"
+                bool omni:rtx:post:registeredCompositing:invertColorCorrection = 1
+                bool omni:rtx:post:registeredCompositing:invertToneMap = 1
+                bool omni:rtx:pt:lightcache:cached:dontResolveConflicts = 1
+                int omni:rtx:pt:maxSamplesPerLaunch = 2073600
+                int omni:rtx:pt:mgpu:maxPixelsPerRegionExponent = 12
+                color3f omni:rtx:rt:ambientLight:color = (0.1, 0.1, 0.1)
+                bool omni:rtx:rt:demoire = 0
+                bool omni:rtx:rt:ecoMode:enabled
+                bool omni:rtx:rt:lightcache:spatialCache:dontResolveConflicts = 1
+                bool omni:rtx:scene:hydra:materialSyncLoads = 1
+                bool omni:rtx:scene:hydra:mdlMaterialWarmup = 1
+                uint omni:rtx:viewTile:limit = 4294967295
+                rel orderedVars = </Render/Vars/LdrColor>
+                custom bool overrideClipRange = 0
+                uniform int2 resolution = (2048, 1080)
+            }
+        }
+    }
+
+    def RenderSettings "OmniverseGlobalRenderSettings" (
+        prepend apiSchemas = ["OmniRtxSettingsGlobalRtAdvancedAPI_1", "OmniRtxSettingsGlobalPtAdvancedAPI_1"]
+        no_delete = true
+    )
+    {
+        rel products = </Render/OmniverseKit/HydraTextures/omni_kit_widget_viewport_ViewportTexture_0>
+    }
+
+    def "Vars"
+    {
+        def RenderVar "LdrColor" (
+            hide_in_stage_window = true
+            no_delete = true
+        )
+        {
+            uniform string sourceName = "LdrColor"
+        }
+    }
+}
+
+def "Viewport_Measure" (
+    hide_in_stage_window = true
+)
+{
+}
+
+def Xform "franka" (
+    prepend references = @https://omniverse-content-staging.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Robots/FrankaRobotics/FrankaPanda/franka.usd@
+    variants = {
+        string Gripper = "Default"
+        string Mesh = "Quality"
+        string ShadowHand = "None"
+    }
+    prepend variantSets = "Gripper"
+)
+{
+    string isaac:namespace (
+        displayName = "Namespace"
+        doc = "Namespace of the prim in Isaac Sim"
+    )
+    quatd xformOp:orient = (1, 0, 0, 0)
+    double3 xformOp:scale = (1, 1, 1)
+    double3 xformOp:translate = (0, 0, 0)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+    over "panda_link0"
+    {
+        string isaac:nameOverride (
+            displayName = "Name Override"
+            doc = "Name override for prim lookup in base name search"
+        )
+        bool physics:rigidBodyEnabled = 1
+        rel physics:simulationOwner
+
+        over "geometry" (
+            instanceable = false
+        )
+        {
+            over "cables_connected" (
+                active = false
+            )
+            {
+            }
+
+            over "ID3_000frA" (
+                instanceable = false
+            )
+            {
+            }
+        }
+
+        over "panda_joint1"
+        {
+            float drive:angular:physics:targetPosition = -25
+            custom string isaac:nameOverride (
+                displayName = "Name Override"
+                doc = "Name override for prim lookup in base name search"
+            )
+            float physics:lowerLimit = -166.00307
+            float physics:upperLimit = 166.00307
+            float state:angular:physics:position = 0.69999003
+            float state:angular:physics:velocity = 0.000047647267
+        }
+    }
+
+    over "allegro_hand_right"
+    {
+        string isaac:namespace (
+            displayName = "Namespace"
+            doc = "Namespace of the prim in Isaac Sim"
+        )
+        quatd xformOp:orient = (0.004937744096119117, -0.38990241178552654, -0.9207304565835359, 0.01439285539927572)
+        double3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (0.08799996972084033, -8.7514256672956e-31, 0.8317881799526291)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    over "panda_hand"
+    {
+        string isaac:nameOverride (
+            displayName = "Name Override"
+            doc = "Name override for prim lookup in base name search"
+        )
+        rel physics:simulationOwner
+
+        over "panda_finger_joint1"
+        {
+            float drive:linear:physics:targetPosition = 0.013
+            custom string isaac:nameOverride (
+                displayName = "Name Override"
+                doc = "Name override for prim lookup in base name search"
+            )
+            float physics:lowerLimit = 0
+            float physics:upperLimit = 0.04
+            float state:linear:physics:position = 0.0130335335
+            float state:linear:physics:velocity = -0.00018376386
+        }
+
+        over "panda_finger_joint2"
+        {
+            custom string isaac:nameOverride (
+                displayName = "Name Override"
+                doc = "Name override for prim lookup in base name search"
+            )
+            float physics:lowerLimit = 0
+            float physics:upperLimit = 0.04
+            float state:linear:physics:position = 0.013033497
+            float state:linear:physics:velocity = -0.00018376386
+        }
+
+        over "tool_center"
+        {
+            quatd xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:translate = (-0.0007831740841259538, -0.0016046664184853204, 0.23810858717516825)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        over "geometry" (
+            instanceable = false
+        )
+        {
+            over "panda_hand" (
+                instanceable = true
+            )
+            {
+            }
+
+            over "Looks" (
+                instanceable = true
+            )
+            {
+            }
+        }
+    }
+
+    over "panda_link1"
+    {
+        string isaac:nameOverride (
+            displayName = "Name Override"
+            doc = "Name override for prim lookup in base name search"
+        )
+        rel physics:simulationOwner
+
+        over "panda_joint2"
+        {
+            float drive:angular:physics:targetPosition = -54.8
+            float physics:lowerLimit = -101.001
+            float physics:upperLimit = 101.001
+            float state:angular:physics:position = -54.736107
+            float state:angular:physics:velocity = -0.3207769
+        }
+
+        over "geometry" (
+            instanceable = false
+        )
+        {
+            over "ID3_000"
+            {
+            }
+        }
+    }
+
+    over "panda_link2"
+    {
+        string isaac:nameOverride (
+            displayName = "Name Override"
+            doc = "Name override for prim lookup in base name search"
+        )
+        rel physics:simulationOwner
+
+        over "panda_joint3"
+        {
+            float physics:lowerLimit = -166.00307
+            float physics:upperLimit = 166.00307
+            float state:angular:physics:position = -8.2856275e-7
+            float state:angular:physics:velocity = 0.0000042729393
+        }
+
+        over "geometry" (
+            instanceable = false
+        )
+        {
+            over "ID3_000"
+            {
+            }
+        }
+    }
+
+    over "panda_link3"
+    {
+        string isaac:nameOverride (
+            displayName = "Name Override"
+            doc = "Name override for prim lookup in base name search"
+        )
+        rel physics:simulationOwner
+
+        over "panda_joint4"
+        {
+            float drive:angular:physics:targetPosition = -154.90001
+            float physics:lowerLimit = -176.00117
+            float physics:upperLimit = -3.9992452
+            float state:angular:physics:position = -154.96748
+            float state:angular:physics:velocity = 0.3379083
+        }
+
+        over "geometry" (
+            instanceable = false
+        )
+        {
+            over "ID17_001"
+            {
+            }
+        }
+    }
+
+    over "panda_link4"
+    {
+        string isaac:nameOverride (
+            displayName = "Name Override"
+            doc = "Name override for prim lookup in base name search"
+        )
+        rel physics:simulationOwner
+
+        over "panda_joint5"
+        {
+            float physics:lowerLimit = -166.00307
+            float physics:upperLimit = 166.00307
+            float state:angular:physics:position = 0.0001147935
+            float state:angular:physics:velocity = -0.00057544094
+        }
+
+        over "geometry" (
+            instanceable = false
+        )
+        {
+            over "ID25_000frA"
+            {
+            }
+        }
+    }
+
+    over "panda_link5"
+    {
+        string isaac:nameOverride (
+            displayName = "Name Override"
+            doc = "Name override for prim lookup in base name search"
+        )
+        rel physics:simulationOwner
+
+        over "panda_joint6"
+        {
+            float drive:angular:physics:targetPosition = 175.8
+            float physics:lowerLimit = -1.0026761
+            float physics:upperLimit = 215.00241
+            float state:angular:physics:position = 175.79767
+            float state:angular:physics:velocity = 0.011677466
+        }
+
+        over "geometry" (
+            instanceable = false
+        )
+        {
+            over "ID11_000"
+            {
+            }
+        }
+    }
+
+    over "panda_link6"
+    {
+        string isaac:nameOverride (
+            displayName = "Name Override"
+            doc = "Name override for prim lookup in base name search"
+        )
+        rel physics:simulationOwner
+
+        over "panda_joint7"
+        {
+            float drive:angular:physics:targetPosition = -44.600002
+            float physics:lowerLimit = -166.00307
+            float physics:upperLimit = 166.00307
+            float state:angular:physics:position = -44.599785
+            float state:angular:physics:velocity = -0.0010061738
+        }
+
+        over "geometry" (
+            instanceable = false
+        )
+        {
+            over "ID389_001frA"
+            {
+            }
+        }
+    }
+
+    over "panda_link7"
+    {
+        string isaac:nameOverride (
+            displayName = "Name Override"
+            doc = "Name override for prim lookup in base name search"
+        )
+        rel physics:simulationOwner
+
+        over "geometry" (
+            instanceable = false
+        )
+        {
+            over "ID1683_001"
+            {
+            }
+
+            over "ID1683_001frA"
+            {
+            }
+        }
+    }
+
+    over "panda_leftfinger" (
+        instanceable = false
+    )
+    {
+        string isaac:nameOverride (
+            displayName = "Name Override"
+            doc = "Name override for prim lookup in base name search"
+        )
+        rel physics:simulationOwner
+        quatf xformOp:orient = (6.123234e-17, 0.92387944, 0.38268366, -2.9291539e-18)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0.087999955, -3.159046e-8, 0.8676)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "geometry" (
+            instanceable = false
+        )
+        {
+            double3 xformOp:rotateZYX = (0, 0, 0)
+            double3 xformOp:scale = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZYX", "xformOp:scale"]
+
+            over "panda_leftfinger" (
+                prepend apiSchemas = ["PhysxSDFMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "sdf"
+                rel physics:simulationOwner
+                uniform int physxSDFMeshCollision:sdfResolution = 1024
+                quatd xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (-1.509903313490213e-14, 1.0658141036401503e-14, 13.32)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Mesh "leftfinger_extension" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxSDFMeshCollisionAPI", "PhysicsMassAPI", "PhysxTriangleMeshCollisionAPI", "PhysxConvexDecompositionCollisionAPI"]
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 3, 2, 4, 6, 7, 5, 6, 2, 3, 7, 4, 5, 1, 0, 4, 0, 2, 6, 5, 7, 3, 1]
+                rel material:binding = </franka/panda_leftfinger/geometry/Looks/PlasticGray> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+                normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+                    interpolation = "faceVarying"
+                )
+                uniform token physics:approximation = "sdf"
+                rel physics:simulationOwner
+                uniform int physxSDFMeshCollision:sdfResolution = 1024
+                point3f[] points = [(-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, -0.5, -0.5), (0.5, -0.5, -0.5), (-0.5, 0.5, -0.5), (0.5, 0.5, -0.5)]
+                texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0), (0, 1), (0, 0), (1, 0), (1, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0)] (
+                    interpolation = "faceVarying"
+                )
+                uniform token subdivisionScheme = "none"
+                quatd xformOp:orient = (1, 0, -0, 0)
+                double3 xformOp:scale = (2.074000120162964, 2.36899995803833, 13.300000190734863)
+                double3 xformOp:translate = (0.024219725516521073, 1.4538333201509994, 6.680393959659426)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+        }
+    }
+
+    over "panda_rightfinger" (
+        instanceable = false
+    )
+    {
+        string isaac:nameOverride (
+            displayName = "Name Override"
+            doc = "Name override for prim lookup in base name search"
+        )
+        rel physics:simulationOwner
+        quatf xformOp:orient = (6.123234e-17, 0.9238795, 0.38268346, -8.713758e-18)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0.08799997, -6.9141386e-8, 0.8676)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "geometry" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+            instanceable = false
+        )
+        {
+            rel material:binding = None (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            float3 xformOp:rotateZYX = (0, 0, 0)
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:translate = (5.10702591327572e-15, -3.8746783559417963e-14, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZYX", "xformOp:scale"]
+
+            over "panda_rightfinger" (
+                prepend apiSchemas = ["PhysxSDFMeshCollisionAPI", "PhysxConvexHullCollisionAPI"]
+                instanceable = false
+            )
+            {
+                uniform token physics:approximation = "sdf"
+                rel physics:simulationOwner
+                uniform int physxSDFMeshCollision:sdfResolution = 1024
+                double3 xformOp:rotateZYX = (0, 0, 0)
+                float3 xformOp:scale = (0.01, 0.01, 0.01)
+                double3 xformOp:translate = (-1.734723475976807e-16, -2.0816681711721685e-17, 0.133195256557484)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZYX", "xformOp:scale"]
+            }
+
+            def Mesh "rightfinger_extension" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxSDFMeshCollisionAPI", "PhysicsMassAPI"]
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 3, 2, 4, 6, 7, 5, 6, 2, 3, 7, 4, 5, 1, 0, 4, 0, 2, 6, 5, 7, 3, 1]
+                rel material:binding = </franka/panda_leftfinger/geometry/Looks/PlasticGray> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+                normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+                    interpolation = "faceVarying"
+                )
+                uniform token physics:approximation = "sdf"
+                rel physics:simulationOwner
+                uniform int physxSDFMeshCollision:sdfResolution = 1024
+                point3f[] points = [(-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, -0.5, -0.5), (0.5, -0.5, -0.5), (-0.5, 0.5, -0.5), (0.5, 0.5, -0.5)]
+                texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0), (0, 1), (0, 0), (1, 0), (1, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0)] (
+                    interpolation = "faceVarying"
+                )
+                uniform token subdivisionScheme = "none"
+                quatd xformOp:orient = (0.9999999999999768, -2.212422025534469e-18, 5.341253861752267e-18, -2.154235883772504e-7)
+                double3 xformOp:scale = (0.020740000531077385, 0.02369000017642975, 0.13300000131130219)
+                double3 xformOp:translate = (0.0002117998124004719, -0.014334374143425997, 0.06680393959659425)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+        }
+    }
+
+    over "orca_hand_left_instanceable"
+    {
+        over "left_tower"
+        {
+        }
+
+        over "world2left_tower_fixed_jointbody"
+        {
+        }
+
+        over "world"
+        {
+        }
+
+        over "left_wrist_jointbody"
+        {
+        }
+
+        over "left_palm"
+        {
+        }
+
+        over "left_index_abd_jointbody"
+        {
+        }
+
+        over "left_index_mp"
+        {
+        }
+
+        over "left_index_mcp_jointbody"
+        {
+        }
+
+        over "left_index_pp"
+        {
+        }
+
+        over "left_index_pip_jointbody"
+        {
+        }
+
+        over "left_index_ip"
+        {
+        }
+
+        over "left_index_fingertip"
+        {
+        }
+
+        over "left_middle_abd_jointbody"
+        {
+        }
+
+        over "left_middle_mp"
+        {
+        }
+
+        over "left_middle_mcp_jointbody"
+        {
+        }
+
+        over "left_middle_pp"
+        {
+        }
+
+        over "left_middle_pip_jointbody"
+        {
+        }
+
+        over "left_middle_ip"
+        {
+        }
+
+        over "left_middle_fingertip"
+        {
+        }
+
+        over "left_pinky_abd_jointbody"
+        {
+        }
+
+        over "left_pinky_mp"
+        {
+        }
+
+        over "left_pinky_mcp_jointbody"
+        {
+        }
+
+        over "left_pinky_pp"
+        {
+        }
+
+        over "left_pinky_pip_jointbody"
+        {
+        }
+
+        over "left_pinky_ip"
+        {
+        }
+
+        over "left_pinky_fingertip"
+        {
+        }
+
+        over "left_ring_abd_jointbody"
+        {
+        }
+
+        over "left_ring_mp"
+        {
+        }
+
+        over "left_ring_mcp_jointbody"
+        {
+        }
+
+        over "left_ring_pp"
+        {
+        }
+
+        over "left_ring_pip_jointbody"
+        {
+        }
+
+        over "left_ring_ip"
+        {
+        }
+
+        over "left_ring_fingertip"
+        {
+        }
+
+        over "left_thumb_mcp_jointbody"
+        {
+        }
+
+        over "left_thumb_mp"
+        {
+        }
+
+        over "left_thumb_abd_jointbody"
+        {
+        }
+
+        over "left_thumb_pp"
+        {
+        }
+
+        over "left_thumb_pip_jointbody"
+        {
+        }
+
+        over "left_thumb_ip"
+        {
+        }
+
+        over "left_thumb_dip_jointbody"
+        {
+        }
+
+        over "left_thumb_dp"
+        {
+        }
+
+        over "left_thumb_fingertip"
+        {
+        }
+
+        over "joints"
+        {
+            over "left_wrist"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "left_index_abd"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "left_middle_abd"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "left_pinky_abd"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "left_ring_abd"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "left_thumb_mcp"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "left_index_mcp"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "left_middle_mcp"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "left_pinky_mcp"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "left_ring_mcp"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "left_thumb_abd"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "left_index_pip"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "left_middle_pip"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "left_pinky_pip"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "left_ring_pip"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "left_thumb_pip"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "left_thumb_dip"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+        }
+    }
+
+    over "allegro_hand_right_01"
+    {
+        over "base_link"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_0_0"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_1_0"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_2_0"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_3_0"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_3_0_tip"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_12_0"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_13_0"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_14_0"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_15_0"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_15_0_tip"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_4_0"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_5_0"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_6_0"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_7_0"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_7_0_tip"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_8_0"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_9_0"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_10_0"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_11_0"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "link_11_0_tip"
+        {
+            rel physics:simulationOwner
+        }
+
+        over "joints"
+        {
+            over "joint_0_0"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "joint_12_0"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "joint_4_0"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "joint_8_0"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "joint_1_0"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "joint_13_0"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "joint_5_0"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "joint_9_0"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "joint_2_0"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "joint_14_0"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "joint_6_0"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "joint_10_0"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "joint_3_0"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "joint_15_0"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "joint_7_0"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "joint_11_0"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+        }
+    }
+
+    over "rootJoint"
+    {
+        custom string isaac:nameOverride (
+            displayName = "Name Override"
+            doc = "Name override for prim lookup in base name search"
+        )
+    }
+    variantSet "Gripper" = {
+        "AllegroHand_left" (
+            prepend payload = @configuration/franka_arm_Gripper_allegro_hand_left.usd@
+        ) {
+            prepend rel isaac:physics:robotJoints = </franka/allegro_hand_left>
+            prepend rel isaac:physics:robotLinks = </franka/allegro_hand_left>
+
+        }
+        "AllegroHand_right" (
+            prepend payload = @configuration/franka_arm_Gripper_allegro_hand_right.usd@
+        ) {
+            prepend rel isaac:physics:robotJoints = </franka/allegro_hand_right_01>
+            prepend rel isaac:physics:robotLinks = </franka/allegro_hand_right_01>
+
+        }
+        "None" {
+
+        }
+        "OrcaHand_left" (
+            prepend payload = @configuration/franka_arm_quality_Gripper_orca_hand_left_instanceable.usd@
+        ) {
+            prepend rel isaac:physics:robotJoints = </franka/orca_hand_left_instanceable>
+            prepend rel isaac:physics:robotLinks = </franka/orca_hand_left_instanceable>
+
+        }
+        "SVH_left" (
+            prepend payload = @configuration/franka_arm_quality_Gripper_svh-flat-l_v2.usd@
+        ) {
+            prepend rel isaac:physics:robotJoints = </franka/svh_flat_l_v2>
+            prepend rel isaac:physics:robotLinks = </franka/svh_flat_l_v2>
+
+        }
+        "ShadowHand_left" (
+            prepend payload = @configuration/franka_arm_quality_Gripper_shadow_hand_instanceable.usd@
+        ) {
+            prepend rel isaac:physics:robotJoints = </franka/shadow_hand_instanceable>
+            prepend rel isaac:physics:robotLinks = </franka/shadow_hand_instanceable>
+
+        }
+    }
+}
+

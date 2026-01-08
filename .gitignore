@@ -7,12 +7,7 @@
 # Omniverse
 **/*.dmp
 **/.thumbs
-
-# No USD files allowed in the repo
-**/*.usd
-**/*.usda
-**/*.usdc
-**/*.usdz
+**/*.ovd
 
 # Python
 .DS_Store

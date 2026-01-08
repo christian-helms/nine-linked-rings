@@ -1,0 +1,2129 @@
+#usda 1.0
+(
+    customLayerData = {
+        dictionary cameraSettings = {
+            dictionary Front = {
+                double3 position = (0, 0, 500)
+                double radius = 5
+            }
+            dictionary Perspective = {
+                double3 position = (0.5976395294522654, 0.6561943042473689, 1.4756535395268398)
+                double3 target = (-0.3121905736239977, -0.2536357771128601, 0.5658234364505766)
+            }
+            dictionary Right = {
+                double3 position = (-500, 0, 0)
+                double radius = 5
+            }
+            dictionary Top = {
+                double3 position = (0, 500, 0)
+                double radius = 5
+            }
+            string boundCamera = "/OmniverseKit_Persp"
+        }
+        dictionary omni_layer = {
+            string authoring_layer = "./nine_linked_rings.usda"
+        }
+        dictionary renderSettings = {
+        }
+        dictionary xrSettings = {
+            string "xrstage:customAnchor" = ""
+            string "xrstage:profile:ar:anchorMode" = "scene origin"
+            string "xrstage:profile:ar:customAnchor" = ""
+            string "xrstage:profile:vr:customAnchor" = ""
+        }
+    }
+    defaultPrim = "NineLinkedRingsPuzzle"
+)
+
+def Xform "NineLinkedRingsPuzzle" (
+    instanceable = false
+)
+{
+    quatd xformOp:orient = (1, 0, 0, 0)
+    double3 xformOp:scale = (0.067, 0.067, 0.067)
+    double3 xformOp:translate = (0, 0, 1)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+    def "Plate" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+        displayName = "plate"
+        prepend payload = @./plate.usd@
+    )
+    {
+        bool physics:kinematicEnabled = 0
+        float physics:mass = 0.005
+        bool physics:rigidBodyEnabled = 1
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double xformOp:rotateX:unitsResolve = 90
+        float3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+        double3 xformOp:translate = (0, -3.821045009664274e-33, -0.12795602576167855)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+        over "node_"
+        {
+            over "mesh_" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxTriangleMeshCollisionAPI", "PhysxConvexDecompositionCollisionAPI", "PhysxTriangleMeshSimplificationCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_18> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+                uniform token physics:approximation = "sdf"
+                bool physics:collisionEnabled = 1
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (79.92358692560259, 56.31758321080721, -23.170767227836354)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+        }
+    }
+
+    def "Beam" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+        displayName = "beam"
+        prepend payload = @./beam.usd@
+    )
+    {
+        bool physics:kinematicEnabled = 1
+        float physics:mass = 0.017
+        bool physics:rigidBodyEnabled = 1
+        bool physxRigidBody:disableGravity = 1
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double xformOp:rotateX:unitsResolve = 90
+        float3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+        over "node_"
+        {
+            over "mesh_" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_19> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+                uniform token physics:approximation = "sdf"
+                bool physics:collisionEnabled = 1
+                quatf xformOp:orient = (0.9967835, 0, 0, 0.08014153)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (3.993543057829618e-14, 74.51158641092277, -32.877404013585405)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+        }
+    }
+
+    def Xform "RingRodBall_1"
+    {
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (0, 0, 0.4374830109484058)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def "Ring_1" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "ring"
+            instanceable = false
+            prepend payload = @./ring.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.003
+            bool physics:rigidBodyEnabled = 1
+            token visibility = "inherited"
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (0, 0, 8.881784197001252e-16)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxTriangleMeshCollisionAPI", "PhysxConvexDecompositionCollisionAPI", "PhysxTriangleMeshSimplificationCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    uniform int physxSDFMeshCollision:sdfResolution = 256
+                    token visibility = "inherited"
+                    quatf xformOp:orient = (-0.056978136, 0.6832339, 0.11153932, 0.7193774)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (274.298178651404, 102.90577192504918, -39.664948222480206)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+        }
+
+        def "Rod_1" (
+            delete apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI"]
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "rod"
+            prepend payload = @./rod.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.0005
+            bool physics:rigidBodyEnabled = 1
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (1.3000000193715096, 0.15548882184417037, -0.11710715844462481)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    delete apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxConvexHullCollisionAPI"]
+                    prepend apiSchemas = ["PhysxSDFMeshCollisionAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_09> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (136.89885912190027, 1.7763568394002505e-15, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+
+            def "Ball_1" (
+                displayName = "ball"
+                prepend payload = @./ball.usd@
+            )
+            {
+                quatf xformOp:orient = (-0.70710677, 0.70710677, 0, 0)
+                double xformOp:rotateX:unitsResolve = 90
+                float3 xformOp:scale = (100, 100, 100)
+                double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+                double3 xformOp:translate = (118.38848542836365, 1.2946483175109336, -12.84094097650396)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+                over "node_"
+                {
+                    over "mesh_" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </NineLinkedRingsPuzzle/Looks/Copper> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token physics:approximation = "sdf"
+                        bool physics:collisionEnabled = 1
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (17.56358483215587, -15.24933986751255, 5.734477508758776)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+                }
+            }
+        }
+    }
+
+    def Xform "RingRodBall_2"
+    {
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (-0.22528370694025357, 0, 0.43517849167758504)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def "Ring_2" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "ring"
+            prepend payload = @./ring.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.003
+            bool physics:rigidBodyEnabled = 1
+            token visibility = "inherited"
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (-2.7755575615628914e-17, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxTriangleMeshCollisionAPI", "PhysxConvexDecompositionCollisionAPI", "PhysxTriangleMeshSimplificationCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_01> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    uniform int physxSDFMeshCollision:sdfResolution = 256
+                    token visibility = "inherited"
+                    quatf xformOp:orient = (-0.23674618, 0.6807011, 0.26937705, 0.6387749)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (269.9238105545516, 102.2850612134413, -38.04182285206479)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+        }
+
+        def "Rod_2" (
+            delete apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI"]
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "rod"
+            prepend payload = @./rod.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.0005
+            bool physics:rigidBodyEnabled = 1
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (1.3000000193715096, 0.15548882184417037, -0.11710715844462481)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    delete apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxConvexHullCollisionAPI"]
+                    prepend apiSchemas = ["PhysxSDFMeshCollisionAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_10> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (136.89885912190027, 1.7763568394002505e-15, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+
+            def "Ball_1" (
+                displayName = "ball"
+                prepend payload = @./ball.usd@
+            )
+            {
+                quatf xformOp:orient = (-0.70710677, 0.70710677, 0, 0)
+                double xformOp:rotateX:unitsResolve = 90
+                float3 xformOp:scale = (100, 100, 100)
+                double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+                double3 xformOp:translate = (118.38848542836365, 1.2946483175109336, -12.84094097650396)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+                over "node_"
+                {
+                    over "mesh_" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </NineLinkedRingsPuzzle/Looks/Bronze_10> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token physics:approximation = "sdf"
+                        bool physics:collisionEnabled = 1
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (16.746569965691435, -15.249339867512504, 5.734477508758776)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+                }
+            }
+        }
+    }
+
+    def Xform "RingRodBall_3"
+    {
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (-0.4502789205097142, 0, 0.4291232494271138)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def "Ring_3" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "ring"
+            prepend payload = @./ring.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.003
+            bool physics:rigidBodyEnabled = 1
+            token visibility = "inherited"
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxTriangleMeshCollisionAPI", "PhysxConvexDecompositionCollisionAPI", "PhysxTriangleMeshSimplificationCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_02> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    uniform int physxSDFMeshCollision:sdfResolution = 256
+                    token visibility = "inherited"
+                    quatf xformOp:orient = (-0.23674618, 0.6807011, 0.26937705, 0.6387749)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (269.9238105545516, 102.2850612134413, -38.04182285206479)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+        }
+
+        def "Rod_3" (
+            delete apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI"]
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "rod"
+            prepend payload = @./rod.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.0005
+            bool physics:rigidBodyEnabled = 1
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (1.3000000193715096, 0.15548882184417037, -0.11710715844462481)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    delete apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxConvexHullCollisionAPI"]
+                    prepend apiSchemas = ["PhysxSDFMeshCollisionAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_11> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (136.8988591219005, 1.1368683772161603e-13, 0.24263365246030766)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+
+            def "Ball_1" (
+                displayName = "ball"
+                prepend payload = @./ball.usd@
+            )
+            {
+                quatf xformOp:orient = (-0.70710677, 0.70710677, 0, 0)
+                double xformOp:rotateX:unitsResolve = 90
+                float3 xformOp:scale = (100, 100, 100)
+                double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+                double3 xformOp:translate = (118.38848542836365, 1.2946483175109336, -12.84094097650396)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+                over "node_"
+                {
+                    over "mesh_" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </NineLinkedRingsPuzzle/Looks/Copper_01> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token physics:approximation = "sdf"
+                        bool physics:collisionEnabled = 1
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (16.746569965691464, -15.249339867513072, 5.734477508758772)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+                }
+            }
+        }
+    }
+
+    def Xform "RingRodBall_4"
+    {
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (-0.674065202759059, 0, 0.426530677236142)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def "Ring_4" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "ring"
+            prepend payload = @./ring.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.003
+            bool physics:rigidBodyEnabled = 1
+            token visibility = "inherited"
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxTriangleMeshCollisionAPI", "PhysxConvexDecompositionCollisionAPI", "PhysxTriangleMeshSimplificationCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_03> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    uniform int physxSDFMeshCollision:sdfResolution = 256
+                    token visibility = "inherited"
+                    quatf xformOp:orient = (-0.23674618, 0.6807011, 0.26937705, 0.6387749)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (269.9238105545516, 102.2850612134413, -38.04182285206479)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+        }
+
+        def "Rod_4" (
+            delete apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI"]
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "rod"
+            prepend payload = @./rod.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.0005
+            bool physics:rigidBodyEnabled = 1
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (1.3000000193715096, 0.15548882184417037, -0.11710715844462481)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    delete apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxConvexHullCollisionAPI"]
+                    prepend apiSchemas = ["PhysxSDFMeshCollisionAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_12> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (136.8988591219005, 1.1368683772161603e-13, 0.24263365246030766)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+
+            def "Ball_1" (
+                displayName = "ball"
+                prepend payload = @./ball.usd@
+            )
+            {
+                quatf xformOp:orient = (-0.70710677, 0.70710677, 0, 0)
+                double xformOp:rotateX:unitsResolve = 90
+                float3 xformOp:scale = (100, 100, 100)
+                double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+                double3 xformOp:translate = (118.38848542836365, 1.2946483175109336, -12.84094097650396)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+                over "node_"
+                {
+                    over "mesh_" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </NineLinkedRingsPuzzle/Looks/Bronze_11> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token physics:approximation = "sdf"
+                        bool physics:collisionEnabled = 1
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (16.746569965690924, -15.249339867512958, 5.734477508758772)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+                }
+            }
+        }
+    }
+
+    def Xform "RingRodBall_5"
+    {
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (-0.8971909739869561, 0, 0.41930232462829753)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def "Ring_5" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "ring"
+            prepend payload = @./ring.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.003
+            bool physics:rigidBodyEnabled = 1
+            token visibility = "inherited"
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxTriangleMeshCollisionAPI", "PhysxConvexDecompositionCollisionAPI", "PhysxTriangleMeshSimplificationCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_04> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    uniform int physxSDFMeshCollision:sdfResolution = 256
+                    token visibility = "inherited"
+                    quatf xformOp:orient = (-0.23674618, 0.6807011, 0.26937705, 0.6387749)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (269.9238105545516, 102.2850612134413, -38.04182285206479)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+        }
+
+        def "Rod_5" (
+            delete apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI"]
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "rod"
+            prepend payload = @./rod.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.0005
+            bool physics:rigidBodyEnabled = 1
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (1.3000000193715096, 0.15548882184417037, -0.11710715844462481)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    delete apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxConvexHullCollisionAPI"]
+                    prepend apiSchemas = ["PhysxSDFMeshCollisionAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_13> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (136.8988591219005, 1.1368683772161603e-13, 0.24263365246030766)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+
+            def "Ball_1" (
+                displayName = "ball"
+                prepend payload = @./ball.usd@
+            )
+            {
+                quatf xformOp:orient = (-0.70710677, 0.70710677, 0, 0)
+                double xformOp:rotateX:unitsResolve = 90
+                float3 xformOp:scale = (100, 100, 100)
+                double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+                double3 xformOp:translate = (118.38848542836365, 1.2946483175109336, -12.84094097650396)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+                over "node_"
+                {
+                    over "mesh_" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </NineLinkedRingsPuzzle/Looks/Copper_02> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token physics:approximation = "sdf"
+                        bool physics:collisionEnabled = 1
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (16.74656996569138, -15.249339867512617, 5.734477508758776)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+                }
+            }
+        }
+    }
+
+    def Xform "RingRodBall_6"
+    {
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (-1.1251804643214884, 0, 0.41198208839635586)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def "Ring_6" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "ring"
+            prepend payload = @./ring.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.003
+            bool physics:rigidBodyEnabled = 1
+            token visibility = "inherited"
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxTriangleMeshCollisionAPI", "PhysxConvexDecompositionCollisionAPI", "PhysxTriangleMeshSimplificationCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_05> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    uniform int physxSDFMeshCollision:sdfResolution = 256
+                    token visibility = "inherited"
+                    quatf xformOp:orient = (-0.23674618, 0.6807011, 0.26937705, 0.6387749)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (269.9238105545516, 102.2850612134413, -38.04182285206479)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+        }
+
+        def "Rod_6" (
+            delete apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI"]
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "rod"
+            prepend payload = @./rod.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.0005
+            bool physics:rigidBodyEnabled = 1
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (1.3000000193715096, 0.15548882184417037, -0.11710715844462481)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    delete apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxConvexHullCollisionAPI"]
+                    prepend apiSchemas = ["PhysxSDFMeshCollisionAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_14> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (136.8988591219005, 1.1368683772161603e-13, 0.24263365246030766)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+
+            def "Ball_1" (
+                displayName = "ball"
+                prepend payload = @./ball.usd@
+            )
+            {
+                quatf xformOp:orient = (-0.70710677, 0.70710677, 0, 0)
+                double xformOp:rotateX:unitsResolve = 90
+                float3 xformOp:scale = (100, 100, 100)
+                double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+                double3 xformOp:translate = (118.38848542836365, 1.2946483175109336, -12.84094097650396)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+                over "node_"
+                {
+                    over "mesh_" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </NineLinkedRingsPuzzle/Looks/Bronze_12> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token physics:approximation = "sdf"
+                        bool physics:collisionEnabled = 1
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (17.56358483215587, -15.24933986751255, 5.734477508758776)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+                }
+            }
+        }
+    }
+
+    def Xform "RingRodBall_7"
+    {
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (-1.349305625891979, 0, 0.40424368749692796)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def "Ring_7" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "ring"
+            prepend payload = @./ring.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.003
+            bool physics:rigidBodyEnabled = 1
+            token visibility = "inherited"
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxTriangleMeshCollisionAPI", "PhysxConvexDecompositionCollisionAPI", "PhysxTriangleMeshSimplificationCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_06> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    uniform int physxSDFMeshCollision:sdfResolution = 256
+                    token visibility = "inherited"
+                    quatf xformOp:orient = (-0.23674618, 0.6807011, 0.26937705, 0.6387749)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (270.41250245748324, 101.74262882220182, -38.0258766173002)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+        }
+
+        def "Rod_7" (
+            delete apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI"]
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "rod"
+            prepend payload = @./rod.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.0005
+            bool physics:rigidBodyEnabled = 1
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (1.3000000193715096, 0.15548882184417037, -0.11710715844462481)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    delete apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxConvexHullCollisionAPI"]
+                    prepend apiSchemas = ["PhysxSDFMeshCollisionAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_15> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (136.8988591219005, 1.1368683772161603e-13, 0.24263365246030766)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+
+            def "Ball_1" (
+                displayName = "ball"
+                prepend payload = @./ball.usd@
+            )
+            {
+                quatf xformOp:orient = (-0.70710677, 0.70710677, 0, 0)
+                double xformOp:rotateX:unitsResolve = 90
+                float3 xformOp:scale = (100, 100, 100)
+                double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+                double3 xformOp:translate = (118.38848542836365, 1.2946483175109336, -12.84094097650396)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+                over "node_"
+                {
+                    over "mesh_" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </NineLinkedRingsPuzzle/Looks/Copper_03> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token physics:approximation = "sdf"
+                        bool physics:collisionEnabled = 1
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (17.56358483215587, -15.24933986751255, 5.734477508758776)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+                }
+            }
+        }
+    }
+
+    def Xform "RingRodBall_8"
+    {
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (-1.5755410798751515, 0, 0.4014646312843645)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def "Ring_8" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "ring"
+            prepend payload = @./ring.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.003
+            bool physics:rigidBodyEnabled = 1
+            token visibility = "inherited"
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxTriangleMeshCollisionAPI", "PhysxConvexDecompositionCollisionAPI", "PhysxTriangleMeshSimplificationCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_07> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    uniform int physxSDFMeshCollision:sdfResolution = 256
+                    token visibility = "inherited"
+                    quatf xformOp:orient = (-0.23674618, 0.6807011, 0.26937705, 0.6387749)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (270.5180684052012, 101.62545399464523, -38.022431953340366)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+        }
+
+        def "Rod_8" (
+            delete apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI"]
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "rod"
+            prepend payload = @./rod.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.0005
+            bool physics:rigidBodyEnabled = 1
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (1.3000000193715096, 0.15548882184417037, -0.11710715844462481)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    delete apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxConvexHullCollisionAPI"]
+                    prepend apiSchemas = ["PhysxSDFMeshCollisionAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_16> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (136.8988591219005, 1.1368683772161603e-13, 0.24263365246030766)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+
+            def "Ball_1" (
+                displayName = "ball"
+                prepend payload = @./ball.usd@
+            )
+            {
+                quatf xformOp:orient = (-0.70710677, 0.70710677, 0, 0)
+                double xformOp:rotateX:unitsResolve = 90
+                float3 xformOp:scale = (100, 100, 100)
+                double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+                double3 xformOp:translate = (118.38848542836365, 1.2946483175109336, -12.84094097650396)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+                over "node_"
+                {
+                    over "mesh_" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </NineLinkedRingsPuzzle/Looks/Bronze_13> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token physics:approximation = "sdf"
+                        bool physics:collisionEnabled = 1
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (17.56358483215587, -15.24933986751255, 5.734477508758776)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+                }
+            }
+        }
+    }
+
+    def Xform "RingRodBall_9"
+    {
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (-1.7997895747207413, 0, 0.3960333197552902)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def "Ring_9" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "ring"
+            prepend payload = @./ring.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.003
+            bool physics:rigidBodyEnabled = 1
+            token visibility = "inherited"
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxTriangleMeshCollisionAPI", "PhysxConvexDecompositionCollisionAPI", "PhysxTriangleMeshSimplificationCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_08> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    uniform int physxSDFMeshCollision:sdfResolution = 256
+                    token visibility = "inherited"
+                    quatf xformOp:orient = (-0.23674618, 0.6807011, 0.26937705, 0.6387749)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (270.75859610076975, 101.35847594102323, -38.01458342735112)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+        }
+
+        def "Rod_9" (
+            delete apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI"]
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+            displayName = "rod"
+            prepend payload = @./rod.usd@
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.0005
+            bool physics:rigidBodyEnabled = 1
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double xformOp:rotateX:unitsResolve = 90
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+            double3 xformOp:translate = (1.3000000193715096, 0.15548882184417037, -0.11710715844462481)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+            over "node_"
+            {
+                over "mesh_" (
+                    delete apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxConvexHullCollisionAPI"]
+                    prepend apiSchemas = ["PhysxSDFMeshCollisionAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_17> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    uniform token physics:approximation = "sdf"
+                    bool physics:collisionEnabled = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (136.8988591219005, 1.1368683772161603e-13, 0.24263365246030766)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+
+            def "Ball_1" (
+                displayName = "ball"
+                prepend payload = @./ball.usd@
+            )
+            {
+                quatf xformOp:orient = (-0.70710677, 0.70710677, 0, 0)
+                double xformOp:rotateX:unitsResolve = 90
+                float3 xformOp:scale = (100, 100, 100)
+                double3 xformOp:scale:unitsResolve = (0.01, 0.01, 0.01)
+                double3 xformOp:translate = (118.38848542836365, 1.2946483175109336, -12.84094097650396)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:rotateX:unitsResolve", "xformOp:scale:unitsResolve"]
+
+                over "node_"
+                {
+                    over "mesh_" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxSDFMeshCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </NineLinkedRingsPuzzle/Looks/Copper_04> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token physics:approximation = "sdf"
+                        bool physics:collisionEnabled = 1
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (17.56358483215587, -15.24933986751255, 5.734477508758776)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+                }
+            }
+        }
+    }
+
+    def Scope "Looks"
+    {
+        def Material "Steel_Stainless"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_01"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_01/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_01/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_01/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_02"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_02/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_02/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_02/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_03"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_03/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_03/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_03/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_04"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_04/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_04/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_04/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_05"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_05/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_05/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_05/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_06"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_06/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_06/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_06/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_07"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_07/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_07/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_07/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_08"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_08/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_08/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_08/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_09"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_09/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_09/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_09/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_10"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_10/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_10/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_10/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_11"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_11/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_11/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_11/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_12"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_12/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_12/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_12/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_13"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_13/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_13/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_13/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_14"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_14/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_14/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_14/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_15"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_15/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_15/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_15/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_16"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_16/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_16/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_16/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_17"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_17/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_17/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_17/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Bronze"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Bronze/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Bronze/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Bronze/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Bronze.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Bronze"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Bronze_01"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Bronze_01/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Bronze_01/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Bronze_01/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Bronze.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Bronze"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Bronze_02"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Bronze_02/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Bronze_02/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Bronze_02/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Bronze.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Bronze"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Bronze_03"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Bronze_03/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Bronze_03/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Bronze_03/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Bronze.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Bronze"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Bronze_04"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Bronze_04/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Bronze_04/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Bronze_04/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Bronze.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Bronze"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Bronze_05"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Bronze_05/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Bronze_05/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Bronze_05/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Bronze.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Bronze"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Bronze_06"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Bronze_06/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Bronze_06/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Bronze_06/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Bronze.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Bronze"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Bronze_07"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Bronze_07/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Bronze_07/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Bronze_07/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Bronze.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Bronze"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Bronze_08"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Bronze_08/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Bronze_08/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Bronze_08/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Bronze.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Bronze"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Bronze_09"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Bronze_09/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Bronze_09/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Bronze_09/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Bronze.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Bronze"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_18"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_18/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_18/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_18/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Brushed_Antique_Copper"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Brushed_Antique_Copper/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Brushed_Antique_Copper/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Brushed_Antique_Copper/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Brushed_Antique_Copper.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Brushed_Antique_Copper"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Brushed_Antique_Copper_01"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Brushed_Antique_Copper_01/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Brushed_Antique_Copper_01/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Brushed_Antique_Copper_01/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Brushed_Antique_Copper.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Brushed_Antique_Copper"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Brushed_Antique_Copper_02"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Brushed_Antique_Copper_02/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Brushed_Antique_Copper_02/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Brushed_Antique_Copper_02/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Brushed_Antique_Copper.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Brushed_Antique_Copper"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Brass"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Brass/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Brass/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Brass/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Brass.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Brass"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Clear_Glass"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Clear_Glass/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Clear_Glass/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Clear_Glass/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Glass/Clear_Glass.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Clear_Glass"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Timber"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Timber/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Timber/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Timber/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Wood/Timber.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Timber"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Timber_Cladding"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Timber_Cladding/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Timber_Cladding/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Timber_Cladding/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Wood/Timber_Cladding.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Timber_Cladding"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Walnut"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Walnut/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Walnut/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Walnut/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Wood/Walnut.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Walnut"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Gold"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Gold/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Gold/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Gold/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Gold.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Gold"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Brushed_Antique_Copper_03"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Brushed_Antique_Copper_03/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Brushed_Antique_Copper_03/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Brushed_Antique_Copper_03/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Brushed_Antique_Copper.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Brushed_Antique_Copper"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Brushed_Antique_Copper_04"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Brushed_Antique_Copper_04/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Brushed_Antique_Copper_04/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Brushed_Antique_Copper_04/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Brushed_Antique_Copper.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Brushed_Antique_Copper"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Steel_Stainless_19"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_19/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_19/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Steel_Stainless_19/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Steel_Stainless.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Steel_Stainless"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Walnut_Planks"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Walnut_Planks/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Walnut_Planks/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Walnut_Planks/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Wood/Walnut_Planks.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Walnut_Planks"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Bamboo"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Bamboo/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Bamboo/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Bamboo/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Wood/Bamboo.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Bamboo"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Bamboo_01"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Bamboo_01/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Bamboo_01/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Bamboo_01/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Wood/Bamboo.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Bamboo"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Walnut_01"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Walnut_01/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Walnut_01/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Walnut_01/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Wood/Walnut.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Walnut"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Copper"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Copper/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Copper/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Copper/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Copper.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Copper"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Bronze_10"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Bronze_10/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Bronze_10/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Bronze_10/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Bronze.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Bronze"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Copper_01"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Copper_01/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Copper_01/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Copper_01/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Copper.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Copper"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Bronze_11"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Bronze_11/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Bronze_11/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Bronze_11/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Bronze.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Bronze"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Copper_02"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Copper_02/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Copper_02/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Copper_02/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Copper.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Copper"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Bronze_12"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Bronze_12/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Bronze_12/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Bronze_12/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Bronze.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Bronze"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Copper_03"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Copper_03/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Copper_03/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Copper_03/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Copper.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Copper"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Copper_04"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Copper_04/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Copper_04/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Copper_04/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Copper.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Copper"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+
+        def Material "Bronze_13"
+        {
+            token outputs:mdl:displacement.connect = </NineLinkedRingsPuzzle/Looks/Bronze_13/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </NineLinkedRingsPuzzle/Looks/Bronze_13/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </NineLinkedRingsPuzzle/Looks/Bronze_13/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @@@../../../local-omniverse/Base_Materials_NVD@10013/Materials/2023_1/Base/Metals/Bronze.mdl@@@
+                uniform token info:mdl:sourceAsset:subIdentifier = "Bronze"
+                token outputs:out (
+                    renderType = "material"
+                )
+            }
+        }
+    }
+}
+
+def "Render" (
+    hide_in_stage_window = true
+    no_delete = true
+)
+{
+    def "OmniverseKit"
+    {
+        def "HydraTextures" (
+            hide_in_stage_window = true
+            no_delete = true
+        )
+        {
+            def RenderProduct "omni_kit_widget_viewport_ViewportTexture_0" (
+                prepend apiSchemas = ["OmniRtxSettingsCommonAdvancedAPI_1", "OmniRtxSettingsRtAdvancedAPI_1", "OmniRtxSettingsPtAdvancedAPI_1", "OmniRtxPostColorGradingAPI_1", "OmniRtxPostChromaticAberrationAPI_1", "OmniRtxPostBloomPhysicalAPI_1", "OmniRtxPostMatteObjectAPI_1", "OmniRtxPostCompositingAPI_1", "OmniRtxPostDofAPI_1", "OmniRtxPostMotionBlurAPI_1", "OmniRtxPostTvNoiseAPI_1", "OmniRtxPostTonemapIrayReinhardAPI_1", "OmniRtxPostDebugSettingsAPI_1", "OmniRtxDebugSettingsAPI_1"]
+                hide_in_stage_window = true
+                no_delete = true
+            )
+            {
+                rel camera = </OmniverseKit_Persp>
+                token omni:rtx:background:source:texture:textureMode = "repeatMirrored"
+                token omni:rtx:background:source:type = "domeLight"
+                bool omni:rtx:dlss:frameGeneration = 0
+                bool omni:rtx:material:db:nonVisualMaterialCSV:enabled = 0
+                bool omni:rtx:material:db:syncLoads = 1
+                token omni:rtx:post:dlss:execMode = "performance"
+                bool omni:rtx:post:registeredCompositing:invertColorCorrection = 1
+                bool omni:rtx:post:registeredCompositing:invertToneMap = 1
+                bool omni:rtx:pt:lightcache:cached:dontResolveConflicts = 1
+                int omni:rtx:pt:maxSamplesPerLaunch = 2073600
+                int omni:rtx:pt:mgpu:maxPixelsPerRegionExponent = 12
+                color3f omni:rtx:rt:ambientLight:color = (0.1, 0.1, 0.1)
+                bool omni:rtx:rt:demoire = 0
+                bool omni:rtx:rt:lightcache:spatialCache:dontResolveConflicts = 1
+                bool omni:rtx:scene:hydra:materialSyncLoads = 1
+                bool omni:rtx:scene:hydra:mdlMaterialWarmup = 1
+                uint omni:rtx:viewTile:limit = 4294967295
+                rel orderedVars = </Render/Vars/LdrColor>
+                custom bool overrideClipRange = 0
+                uniform int2 resolution = (1280, 720)
+            }
+        }
+    }
+
+    def RenderSettings "OmniverseGlobalRenderSettings" (
+        prepend apiSchemas = ["OmniRtxSettingsGlobalRtAdvancedAPI_1", "OmniRtxSettingsGlobalPtAdvancedAPI_1"]
+        no_delete = true
+    )
+    {
+        rel products = </Render/OmniverseKit/HydraTextures/omni_kit_widget_viewport_ViewportTexture_0>
+    }
+
+    def "Vars"
+    {
+        def RenderVar "LdrColor" (
+            hide_in_stage_window = true
+            no_delete = true
+        )
+        {
+            uniform string sourceName = "LdrColor"
+        }
+    }
+}
+
