@@ -157,7 +157,7 @@ def _setup_device(cfg: DictConfig, env: ManagerBasedEnv) -> DeviceBase:
     return device
 
 
-@hydra.main(config_path="config", config_name="teleop.yaml")
+@hydra.main(config_path="config", config_name="teleop_hand.yaml")
 def main(cfg: DictConfig) -> None:
     """Main teleoperation loop with recording capability."""
 

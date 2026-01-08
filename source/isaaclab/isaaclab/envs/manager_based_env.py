@@ -9,6 +9,7 @@ import torch
 import warnings
 from collections.abc import Sequence
 from typing import Any
+import time
 
 import omni.physx
 from isaacsim.core.simulation_manager import SimulationManager
@@ -461,6 +462,8 @@ class ManagerBasedEnv:
             A tuple containing the observations and extras.
         """
         # process actions
+        env_step_start_time = time.time()
+
         self.action_manager.process_action(action.to(self.device))
 
         self.recorder_manager.record_pre_step()
@@ -469,22 +472,40 @@ class ManagerBasedEnv:
         # note: checked here once to avoid multiple checks within the loop
         is_rendering = self.sim.has_gui() or self.sim.has_rtx_sensors()
 
+        action_apply_time = 0.0
+        write_data_to_sim_time = 0.0
+        step_time = 0.0
+        render_time = 0.0
+        update_time = 0.0
+
         # perform physics stepping
         for _ in range(self.cfg.decimation):
             self._sim_step_counter += 1
             # set actions into buffers
+            start_time = time.time()
             self.action_manager.apply_action()
+            action_apply_time += time.time() - start_time
             # set actions into simulator
+            start_time = time.time()
             self.scene.write_data_to_sim()
+            write_data_to_sim_time += time.time() - start_time
             # simulate
+            start_time = time.time()
             self.sim.step(render=False)
+            step_time += time.time() - start_time
             # render between steps only if the GUI or an RTX sensor needs it
             # note: we assume the render interval to be the shortest accepted rendering interval.
             #    If a camera needs rendering at a faster frequency, this will lead to unexpected behavior.
             if self._sim_step_counter % self.cfg.sim.render_interval == 0 and is_rendering:
+                start_time = time.time()
                 self.sim.render()
+                render_time += time.time() - start_time
             # update buffers at sim dt
+            start_time = time.time()
             self.scene.update(dt=self.physics_dt)
+            update_time += time.time() - start_time
+        
+        
 
         # post-step: step interval event
         if "interval" in self.event_manager.available_modes:
@@ -493,6 +514,14 @@ class ManagerBasedEnv:
         # -- compute observations
         self.obs_buf = self.observation_manager.compute(update_history=True)
         self.recorder_manager.record_post_step()
+
+        total_env_step_time = time.time() - env_step_start_time
+        # print(f"Total env step time: {total_env_step_time:.6f} seconds")
+        # print(f"Action apply time share: {action_apply_time / total_env_step_time:.3f}")
+        # print(f"Write data to sim time share: {write_data_to_sim_time / total_env_step_time:.3f}")
+        # print(f"Step time share: {step_time / total_env_step_time:.3f}")
+        # print(f"Render time share: {render_time / total_env_step_time:.3f}")
+        # print(f"Update time share: {update_time / total_env_step_time:.3f}\n")
 
         # return observations and extras
         return self.obs_buf, self.extras

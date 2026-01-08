@@ -8,7 +8,7 @@ FRANKA_ARM_CFG = ArticulationCfg(
     prim_path="{ENV_REGEX_NS}/Robot",
     spawn=sim_utils.UsdFileCfg(
         usd_path="./assets/franka_arm/franka_arm.usda",
-        activate_contact_sensors=False,
+        activate_contact_sensors=True,
         rigid_props=sim_utils.RigidBodyPropertiesCfg(
             disable_gravity=True,
             retain_accelerations=True,
@@ -23,8 +23,8 @@ FRANKA_ARM_CFG = ArticulationCfg(
         fixed_tendons_props=sim_utils.FixedTendonPropertiesCfg(
             limit_stiffness=30.0, damping=0.1
         ),
-        variants={"Gripper": "None", "Mesh": "Quality"},
-        # collision_props=sim_utils.CollisionPropertiesCfg(contact_offset=0.005, rest_offset=0.0),
+        variants={"Gripper": "None", "Mesh": "Performance"},
+        # Arm link collisions are selectively disabled in env setup for performance
     ),
     init_state=ArticulationCfg.InitialStateCfg(
         pos=(0.0, 0.0, 0.0),
@@ -32,7 +32,7 @@ FRANKA_ARM_CFG = ArticulationCfg(
             "panda_joint1": 0.0,
             "panda_joint2": -1.3672,
             "panda_joint3": 0.0,
-            "panda_joint4": -2.6537,
+            "panda_joint4": -1.6537,
             "panda_joint5": 0.0,
             "panda_joint6": 2.8588,
             "panda_joint7": -0.7853981633974483, # -45 degrees
@@ -42,18 +42,38 @@ FRANKA_ARM_CFG = ArticulationCfg(
         "panda_shoulder": ImplicitActuatorCfg(
             joint_names_expr=["panda_joint[1-4]"],
             effort_limit_sim=87.0,
-            stiffness=10_000.0,
+            stiffness=10000.0,
             damping=1000.0,
         ),
         "panda_forearm": ImplicitActuatorCfg(
             joint_names_expr=["panda_joint[5-7]"],
             effort_limit_sim=12.0,
-            stiffness=10_000.0,
+            stiffness=10000.0,
             damping=1000.0,
         ),
     },
     soft_joint_pos_limit_factor=1.0,
 )
+
+def get_franka_hand_cfg():
+    FRANKA_HAND_CFG = deepcopy(FRANKA_ARM_CFG)
+    FRANKA_HAND_CFG.spawn.variants["Gripper"] = "Default"  # pyright: ignore[reportAttributeAccessIssue, reportOptionalMemberAccess]
+    FRANKA_HAND_CFG.init_state.joint_pos["panda_joint1"] = 0.0
+    FRANKA_HAND_CFG.init_state.joint_pos["panda_joint2"] = 0.0
+    FRANKA_HAND_CFG.init_state.joint_pos["panda_joint3"] = 0.0
+    FRANKA_HAND_CFG.init_state.joint_pos["panda_joint4"] = -1.0
+    FRANKA_HAND_CFG.init_state.joint_pos["panda_joint5"] = 0.0
+    FRANKA_HAND_CFG.init_state.joint_pos["panda_joint6"] = 1.5707
+    FRANKA_HAND_CFG.init_state.joint_pos["panda_joint7"] = -0.7853981633974483
+    FRANKA_HAND_CFG.init_state.joint_pos["panda_finger_joint.*"] = 0.0  # pyright: ignore[reportAttributeAccessIssue, reportOptionalMemberAccess]
+    FRANKA_HAND_CFG.actuators["panda_finger"] = ImplicitActuatorCfg(
+        joint_names_expr=["panda_finger_joint.*"],
+        effort_limit_sim=20.0,
+        velocity_limit_sim=100.0,
+        stiffness=600.0,
+        damping=10.0,
+    )
+    return FRANKA_HAND_CFG
 
 
 def get_allegro_right_cfg():

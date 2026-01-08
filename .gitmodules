@@ -16,3 +16,6 @@
 [submodule "GeoRT"]
 	path = GeoRT
 	url = https://github.com/facebookresearch/GeoRT.git
+[submodule "assets/SO-ARM100"]
+	path = assets/SO-ARM100
+	url = https://github.com/TheRobotStudio/SO-ARM100.git

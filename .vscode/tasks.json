@@ -9,7 +9,33 @@
             "command": "/bin/bash",
             "args": [
                 "-lc",
-                "source ${workspaceFolder}/nine-linked-rings-venv/bin/activate && python ${workspaceFolder}/teleoperation/teleop_in_vr.py"
+                "source ${workspaceFolder}/nine-linked-rings-venv/bin/activate && python ${workspaceFolder}/teleoperation/teleop_in_vr.py --anim_recording_enabled --anim_recording_start_time 1 --anim_recording_stop_time 180"
+            ],
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Teleoperate Gripper",
+            "type": "shell",
+            "command": "/bin/bash",
+            "args": [
+                "-lc",
+                "source ${workspaceFolder}/.env && source ${workspaceFolder}/nine-linked-rings-venv/bin/activate && python ${workspaceFolder}/teleoperation/teleop_gripper.py"
+            ],
+            "problemMatcher": [],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Gripper Env W/O Teleop",
+            "type": "shell",
+            "command": "/bin/bash",
+            "args": [
+                "-lc",
+                "source ${workspaceFolder}/.env && source ${workspaceFolder}/nine-linked-rings-venv/bin/activate && python ${workspaceFolder}/environments/gripper_env_cfg.py"
             ],
             "problemMatcher": [],
             "options": {
@@ -35,7 +61,7 @@
             "command": "/bin/bash",
             "args": [
                 "-lc",
-                "source ${workspaceFolder}/nine-linked-rings-venv/bin/activate && ./_isaac_sim/isaac-sim.sh"
+                "source ${workspaceFolder}/.env && source ${workspaceFolder}/nine-linked-rings-venv/bin/activate && ./_isaac_sim/isaac-sim.sh --xr"
             ],
             "problemMatcher": []
         },

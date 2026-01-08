@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""Configuration for Nine Linked Rings environment with RM75+Inspire hand."""
+"""Configuration for Nine Linked Rings environment."""
 
 from __future__ import annotations
 
